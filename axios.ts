@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, RawAxiosRequestHeaders } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  RawAxiosRequestHeaders,
+} from "axios";
 import { version as FRAPPE_CLIENT_VERSION } from "./package.json";
 
 declare global {
@@ -24,11 +28,17 @@ type Args = {
  * @returns AxiosInstance
  */
 export function createAxiosClient(args: Args): AxiosInstance {
-  return axios.create({
+  // Create axios instance.
+  const a = axios.create({
     baseURL: args.url,
     headers: headers(args),
     withCredentials: true,
   });
+
+  // Add response interceptors.
+  a.interceptors.response.use(exRes, handleErr);
+
+  return a;
 }
 
 /**
@@ -37,7 +47,7 @@ export function createAxiosClient(args: Args): AxiosInstance {
  * @param args - Arguments to create headers.
  * @returns RawAxiosRequestHeaders
  */
-export function headers(args: Args): RawAxiosRequestHeaders {
+function headers(args: Args): RawAxiosRequestHeaders {
   // Init default headers.
   const headers: RawAxiosRequestHeaders = {
     Accept: "application/json",
@@ -69,4 +79,18 @@ export function headers(args: Args): RawAxiosRequestHeaders {
   }
 
   return headers;
+}
+
+/**
+ * Extract actual response from axios response.
+ */
+function exRes(r: AxiosResponse) {
+  return r.data.message;
+}
+
+/**
+ * Handle error from axios response.
+ */
+function handleErr(e: any) {
+  return Promise.reject(e);
 }
