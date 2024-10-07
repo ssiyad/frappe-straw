@@ -1,5 +1,11 @@
 import { AxiosInstance } from "axios";
-import { ConstructorArgs, LoginArgs } from "./types";
+import {
+  ConstructorArgs,
+  LoggedInUser,
+  LoginArgs,
+  LoginResponse,
+  LogoutResponse,
+} from "./types";
 
 /**
  * Auth class to handle authentication related operations.
@@ -23,7 +29,7 @@ export class Auth {
    * @returns Login response
    */
   async login(args: LoginArgs) {
-    return this.axios.post(this.endpoints.login, {
+    return this.axios.post<LoginResponse>(this.endpoints.login, {
       usr: args.username,
       pwd: args.password,
     });
@@ -35,7 +41,7 @@ export class Auth {
    * @returns Nothing
    */
   async logout() {
-    return this.axios.post<void>(this.endpoints.logout);
+    return this.axios.post<LogoutResponse>(this.endpoints.logout);
   }
 
   /**
@@ -44,6 +50,6 @@ export class Auth {
    * @returns Logged in user
    */
   async user() {
-    return this.axios.get(this.endpoints.user);
+    return this.axios.get<LoggedInUser>(this.endpoints.user);
   }
 }

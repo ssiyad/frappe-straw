@@ -10,6 +10,11 @@ type Args = {
 
 export class App {
   private readonly axios: AxiosInstance;
+
+  /**
+   * Collection of methods to handle authentication related operations. This
+   * include actions such as login, logout, etc.
+   */
   readonly auth: Auth;
 
   constructor(args: Args) {
