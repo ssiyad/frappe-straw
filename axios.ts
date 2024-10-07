@@ -27,7 +27,7 @@ type Args = {
  * @param args - Arguments to create axios client.
  * @returns AxiosInstance
  */
-export function createAxiosClient(args: Args): AxiosInstance {
+export const createAxios = (args: Args): AxiosInstance => {
   // Create axios instance.
   const a = axios.create({
     baseURL: args.url,
@@ -39,7 +39,7 @@ export function createAxiosClient(args: Args): AxiosInstance {
   a.interceptors.response.use(exRes, handleErr);
 
   return a;
-}
+};
 
 /**
  * Create headers for axios request.
@@ -47,7 +47,7 @@ export function createAxiosClient(args: Args): AxiosInstance {
  * @param args - Arguments to create headers.
  * @returns RawAxiosRequestHeaders
  */
-function headers(args: Args): RawAxiosRequestHeaders {
+const headers = (args: Args): RawAxiosRequestHeaders => {
   // Init default headers.
   const headers: RawAxiosRequestHeaders = {
     Accept: "application/json",
@@ -79,18 +79,18 @@ function headers(args: Args): RawAxiosRequestHeaders {
   }
 
   return headers;
-}
+};
 
 /**
  * Extract actual response from axios response.
  */
-function exRes(r: AxiosResponse) {
+const exRes = (r: AxiosResponse) => {
   return r.data.message;
-}
+};
 
 /**
  * Handle error from axios response.
  */
-function handleErr(e: any) {
+const handleErr = (e: any) => {
   return Promise.reject(e);
-}
+};

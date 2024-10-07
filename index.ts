@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { createAxiosClient } from "./axios";
+import { createAxios } from "./axios";
 import { Auth } from "./auth";
 
 type Args = {
@@ -13,7 +13,7 @@ export class App {
   readonly auth: Auth;
 
   constructor(args: Args) {
-    this.axios = createAxiosClient(args);
+    this.axios = createAxios(args);
     this.auth = new Auth({ axios: this.axios });
   }
 }
