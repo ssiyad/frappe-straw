@@ -1,6 +1,12 @@
 import axios, { AxiosInstance, RawAxiosRequestHeaders } from "axios";
 import { version as FRAPPE_CLIENT_VERSION } from "./package.json";
 
+declare global {
+  interface Window {
+    csrf_token: string;
+  }
+}
+
 const HEADER_SITE_NAME = "X-Frappe-Site-Name";
 const HEADER_CSRF_TOKEN = "X-Frappe-CSRF-Token";
 const HEADER_FRAPPE_CLIENT_VERSION = "X-Frappe-Client-Version";
