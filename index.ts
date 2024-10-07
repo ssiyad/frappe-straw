@@ -26,7 +26,7 @@ export class App {
 
   constructor(args: Args) {
     this.axios = createAxios(args);
-    this.auth = new Auth({ axios: this.axios });
     this.api = new Api({ axios: this.axios });
+    this.auth = new Auth({ api: this.api });
   }
 }

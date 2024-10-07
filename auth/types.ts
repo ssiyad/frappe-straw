@@ -1,7 +1,7 @@
-import { AxiosInstance } from "axios";
+import { Api } from "../api";
 
 export type ConstructorArgs = {
-  axios: AxiosInstance;
+  api: Api;
 };
 
 export type LoginArgs = {

@@ -12,24 +12,48 @@ export class Api {
   private async c<T>(
     method: Method,
     path: Path,
-    args: Args,
+    args?: Args,
   ): Promise<AxiosResponse<T>> {
     return this.axios[method](this.url + path, args);
   }
 
-  get<T>(path: Path, args: Args) {
+  /**
+   * @template T - Return type of the Api call
+   * @param path - Frappe endpoint
+   * @param args - Arguments to pass to the endpoint (optional)
+   * @returns Promise<AxiosResponse<T>>
+   */
+  get<T>(path: Path, args?: Args) {
     return this.c<T>("get", path, args);
   }
 
-  post<T>(path: Path, args: Args) {
+  /**
+   * @template T - Return type of the Api call
+   * @param path - Frappe endpoint
+   * @param args - Arguments to pass to the endpoint (optional)
+   * @returns Promise<AxiosResponse<T>>
+   */
+  post<T>(path: Path, args?: Args) {
     return this.c<T>("post", path, args);
   }
 
-  put<T>(path: Path, args: Args) {
+  /**
+   * @template T - Return type of the Api call
+   * @param path - Frappe endpoint
+   * @param args - Arguments to pass to the endpoint (optional)
+   * @returns Promise<AxiosResponse<T>>
+   */
+  put<T>(path: Path, args?: Args) {
     return this.c<T>("put", path, args);
   }
 
-  delete<T>(path: Path, args: Args) {
+  /**
+   * @template T - Return type of the Api call
+   * @param path - Frappe endpoint
+   * @param args - Arguments to pass to the endpoint (optional)
+   * @returns Promise<AxiosResponse<T>>
+   */
+  delete<T>(path: Path, args?: Args) {
     return this.c<T>("delete", path, args);
   }
 }

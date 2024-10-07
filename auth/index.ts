@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { Api } from "../api";
 import {
   ConstructorArgs,
   LoggedInUser,
@@ -7,19 +7,16 @@ import {
   LogoutResponse,
 } from "./types";
 
-/**
- * Auth class to handle authentication related operations.
- */
 export class Auth {
-  private readonly axios: AxiosInstance;
+  private readonly api: Api;
   private readonly endpoints = {
-    login: "/api/method/login",
-    logout: "/api/method/logout",
-    user: "/api/method/frappe.auth.get_logged_user",
+    login: "login",
+    logout: "logout",
+    user: "frappe.auth.get_logged_user",
   };
 
   constructor(args: ConstructorArgs) {
-    this.axios = args.axios;
+    this.api = args.api;
   }
 
   /**
@@ -29,7 +26,7 @@ export class Auth {
    * @returns Login response
    */
   async login(args: LoginArgs) {
-    return this.axios.post<LoginResponse>(this.endpoints.login, {
+    return this.api.post<LoginResponse>(this.endpoints.login, {
       usr: args.username,
       pwd: args.password,
     });
@@ -41,7 +38,7 @@ export class Auth {
    * @returns Nothing
    */
   async logout() {
-    return this.axios.post<LogoutResponse>(this.endpoints.logout);
+    return this.api.post<LogoutResponse>(this.endpoints.logout);
   }
 
   /**
@@ -50,6 +47,6 @@ export class Auth {
    * @returns Logged in user
    */
   async user() {
-    return this.axios.get<LoggedInUser>(this.endpoints.user);
+    return this.api.get<LoggedInUser>(this.endpoints.user);
   }
 }
