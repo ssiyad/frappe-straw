@@ -1,0 +1,10 @@
+{
+  "name": "frappe-client",
+  "version": "0.1",
+  "description": "Frappe client for JS frontends",
+  "main": "index.ts",
+  "repository": "git@github.com:ssiyad/frappe-client.git",
+  "author": "Sabu Siyad <hello@ssiyad.com>",
+  "license": "GPLv3",
+  "private": false
+}
