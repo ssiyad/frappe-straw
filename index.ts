@@ -20,7 +20,7 @@ export class App {
 
   /**
    * Bare-bone Api client to interact with Frappe server, with commonly used
-   * http methods
+   * http methods.
    */
   readonly api: Api;
 
