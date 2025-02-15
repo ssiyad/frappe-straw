@@ -15,6 +15,10 @@ response of `api` will be modified, additional methods will be added and
 parameters will be different. But under the hood, it will be using `api`. So if
 anyone wanted to use any endpoint (or external URLs), they can use `api`.
 
+## `auth`
+Set of auth related methods. It can be used to login, logout and get current
+user. This module must be able to handle authorisation in the future.
+
 ## `resource`
 Resource is the fundamental data structure of this package. Any `resource` will
 contain helper methods to load, reset and refresh the data. Resources can be

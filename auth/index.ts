@@ -1,52 +1,52 @@
-import { Api } from "../api";
-import {
-  ConstructorArgs,
-  LoggedInUser,
-  LoginArgs,
-  LoginResponse,
-  LogoutResponse,
-} from "./types";
+import { api } from '../api';
 
-export class Auth {
-  private readonly api: Api;
-  private readonly endpoints = {
-    login: "login",
-    logout: "logout",
-    user: "frappe.auth.get_logged_user",
-  };
+/**
+ * Login to Frappe server, using provided credentials.
+ * @param username - Username to login with.
+ * @param password - Password to login with.
+ * @returns Promise
+ */
+export async function login({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
+  return api({
+    url: 'login',
+    method: 'post',
+    data: {
+      usr: username,
+      pwd: password,
+    },
+  })
+    .then(() => 'Successfully logged in')
+    .catch(() => 'Failed to log in');
+}
 
-  constructor(args: ConstructorArgs) {
-    this.api = args.api;
-  }
+/**
+ * Logout from Frappe server.
+ * @returns Promise
+ */
+export async function logout() {
+  return api({
+    url: 'logout',
+    method: 'post',
+  })
+    .then(() => 'Successfully logged out')
+    .catch(() => 'Failed to log out');
+}
 
-  /**
-   * Login to Frappe server, using provided credentials.
-   *
-   * @param args - Arguments to login.
-   * @returns Login response
-   */
-  async login(args: LoginArgs) {
-    return this.api.post<LoginResponse>(this.endpoints.login, {
-      usr: args.username,
-      pwd: args.password,
-    });
-  }
-
-  /**
-   * Logout from Frappe server.
-   *
-   * @returns Nothing
-   */
-  async logout() {
-    return this.api.post<LogoutResponse>(this.endpoints.logout);
-  }
-
-  /**
-   * Get logged in user.
-   *
-   * @returns Logged in user
-   */
-  async user() {
-    return this.api.get<LoggedInUser>(this.endpoints.user);
-  }
+/**
+ * Get logged in user.
+ * @returns Logged in user's id
+ */
+export async function currentUser() {
+  return api({
+    url: 'frappe.auth.get_logged_user',
+    method: 'get',
+  })
+    .then((res) => res.data.message as string)
+    .catch(() => 'Failed to get user');
 }
