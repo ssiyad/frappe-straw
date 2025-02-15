@@ -1,59 +1,29 @@
-import { AxiosInstance, AxiosResponse } from "axios";
-import { Args, ConstructorArgs, Method, Path } from "./types";
+/**
+ * Make an API request.
+ * @param url - URL to make request to.
+ * @param method - HTTP method to use.
+ * @param data - Data to send in request.
+ * @param params - Query parameters to send in request.
+ * @param makeParams - Function to make query parameters.
+ * @returns Promise
+ */
+export function api(args: {
+  url: string;
+  method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
+  data?: Record<string, any>;
+  params?: Record<string, any>;
+  makeParams?: () => Record<string, any>;
+}) {
+  const prefix = '/api/method/';
+  const url = args.url.startsWith('/') ? args.url : prefix + args.url;
+  const method = args.method || 'get';
+  const params = args.makeParams ? args.makeParams() : args.params;
+  const data = args.data;
 
-export class Api {
-  private readonly axios: AxiosInstance;
-  private readonly url = "/api/method/";
-
-  constructor(args: ConstructorArgs) {
-    this.axios = args.axios;
-  }
-
-  private async c<T>(
-    method: Method,
-    path: Path,
-    args?: Args,
-  ): Promise<AxiosResponse<T>> {
-    return this.axios[method](this.url + path, args);
-  }
-
-  /**
-   * @template T - Return type of the Api call
-   * @param path - Frappe endpoint
-   * @param args - Arguments to pass to the endpoint (optional)
-   * @returns Promise<AxiosResponse<T>>
-   */
-  get<T>(path: Path, args?: Args) {
-    return this.c<T>("get", path, args);
-  }
-
-  /**
-   * @template T - Return type of the Api call
-   * @param path - Frappe endpoint
-   * @param args - Arguments to pass to the endpoint (optional)
-   * @returns Promise<AxiosResponse<T>>
-   */
-  post<T>(path: Path, args?: Args) {
-    return this.c<T>("post", path, args);
-  }
-
-  /**
-   * @template T - Return type of the Api call
-   * @param path - Frappe endpoint
-   * @param args - Arguments to pass to the endpoint (optional)
-   * @returns Promise<AxiosResponse<T>>
-   */
-  put<T>(path: Path, args?: Args) {
-    return this.c<T>("put", path, args);
-  }
-
-  /**
-   * @template T - Return type of the Api call
-   * @param path - Frappe endpoint
-   * @param args - Arguments to pass to the endpoint (optional)
-   * @returns Promise<AxiosResponse<T>>
-   */
-  delete<T>(path: Path, args?: Args) {
-    return this.c<T>("delete", path, args);
-  }
+  return window.straw.client.request({
+    url,
+    method,
+    params,
+    data,
+  });
 }
