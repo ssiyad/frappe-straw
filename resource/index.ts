@@ -1,6 +1,6 @@
 import { api } from '../api';
 
-class Resource {
+export class Resource {
   data: any;
 
   constructor(
