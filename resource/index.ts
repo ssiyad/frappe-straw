@@ -4,18 +4,12 @@ export class Resource {
   data: any;
 
   constructor(
-    private readonly url: string,
-    private readonly method?:
-      | 'get'
-      | 'post'
-      | 'put'
-      | 'delete'
-      | 'patch'
-      | 'options',
-    private readonly body?: Record<string, any>,
-    private readonly params?: Record<string, any>,
-    private readonly makeParams?: () => Record<string, any>,
-    private readonly placeholder?: any,
+    readonly url: string,
+    readonly method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options',
+    readonly body?: Record<string, any>,
+    readonly params?: Record<string, any>,
+    readonly makeParams?: () => Record<string, any>,
+    readonly placeholder?: any,
   ) {
     this.data = placeholder;
     this.refresh();
