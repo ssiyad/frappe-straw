@@ -1,9 +1,9 @@
 {
   "name": "frappe-straw",
   "version": "0.1.0",
-  "description": "Frappe client for JS frontends",
+  "description": "Yet another straw to consume Frappe",
   "main": "index.ts",
-  "repository": "git@github.com:ssiyad/frappe-client.git",
+  "repository": "git@github.com:ssiyad/frappe-straw.git",
   "author": "Sabu Siyad <hello@ssiyad.com>",
   "license": "GPLv3",
   "private": false,
