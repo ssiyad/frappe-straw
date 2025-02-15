@@ -15,12 +15,16 @@ export function api(args: {
   makeParams?: () => Record<string, any>;
 }) {
   const prefix = '/api/method/';
-  const url = args.url.startsWith('/') ? args.url : prefix + args.url;
+  const isExternal = args.url.startsWith('http');
+  const isFull = isExternal || args.url.startsWith('/');
+  const baseURL = isExternal ? '' : undefined;
+  const url = isFull ? args.url : prefix + args.url;
   const method = args.method || 'get';
   const params = args.makeParams ? args.makeParams() : args.params;
   const data = args.body;
 
   return window.straw.client.request({
+    baseURL,
     url,
     method,
     params,
