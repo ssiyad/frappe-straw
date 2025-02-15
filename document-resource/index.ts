@@ -13,7 +13,7 @@ export class DocumentResource extends Resource {
         doc: JSON.stringify(this.data),
         action: 'Save',
       },
-    }).then(() => this.refresh());
+    }).then(this.refresh);
   }
 
   /**
@@ -27,7 +27,7 @@ export class DocumentResource extends Resource {
         doc: JSON.stringify(this.data),
         action: 'Submit',
       },
-    }).then(() => this.refresh());
+    }).then(this.refresh);
   }
 
   /**
@@ -41,7 +41,7 @@ export class DocumentResource extends Resource {
         doc: JSON.stringify(this.data),
         action: 'Cancel',
       },
-    }).then(() => this.refresh());
+    }).then(this.refresh);
   }
 }
 
