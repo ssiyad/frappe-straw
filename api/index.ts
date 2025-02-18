@@ -8,23 +8,22 @@ import { straw } from '../shared';
  * @param params - Query parameters to send in request.
  * @returns Promise
  */
-export const api = (args: {
+export const api = ({
+  url,
+  method,
+  params,
+  body,
+}: {
   url: string;
-  method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
   body?: Record<string, any>;
   params?: Record<string, any>;
 }) => {
-  const baseURL = args.url.startsWith('http') ? '' : undefined;
-  const url = args.url;
-  const method = args.method || 'get';
-  const params = args.params;
-  const data = args.body;
-
   return straw.client.request({
-    baseURL,
+    baseURL: url.startsWith('http') ? '' : undefined,
     url,
     method,
     params,
-    data,
+    data: body,
   });
 };

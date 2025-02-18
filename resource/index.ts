@@ -7,7 +7,13 @@ export class Resource {
 
   constructor(
     readonly url: string,
-    readonly method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options',
+    readonly method:
+      | 'get'
+      | 'post'
+      | 'put'
+      | 'delete'
+      | 'patch'
+      | 'options' = 'get',
     readonly body?: Record<string, any>,
     readonly params?: Record<string, any>,
     readonly makeParams?: () => Record<string, any>,
