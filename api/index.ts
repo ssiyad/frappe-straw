@@ -1,4 +1,6 @@
 import { straw } from '../shared';
+import { JsonCompatible } from '../types/json';
+import { getCacheKey } from './cache';
 
 /**
  * Make an API request.
@@ -20,11 +22,12 @@ export const api = async ({
   method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
   body?: Record<string, any>;
   params?: Record<string, any>;
-  cache?: boolean;
+  cache?: JsonCompatible;
 }) => {
+  const cacheKey = getCacheKey(cache, url, method, params, body);
+
   if (cache) {
-    const key = JSON.stringify({ url, method, body, params });
-    const cached = straw.cache.get(key);
+    const cached = straw.cache.get(cacheKey);
     if (cached) {
       return Promise.resolve(cached);
     }
@@ -40,8 +43,7 @@ export const api = async ({
     })
     .then(({ data }) => {
       if (cache) {
-        const key = JSON.stringify({ url, method, body, params });
-        straw.cache.set(key, data);
+        straw.cache.set(cacheKey, data);
       }
       return data;
     });
