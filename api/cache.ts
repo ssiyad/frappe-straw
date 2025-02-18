@@ -1,4 +1,4 @@
-import { JsonCompatible } from '../types/json';
+import { JsonCompatible } from '../types';
 
 export const getCacheKey = (
   cache?: JsonCompatible,

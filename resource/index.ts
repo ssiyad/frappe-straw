@@ -1,5 +1,6 @@
 import { api } from '../api';
-import { JsonCompatible } from '../types/json';
+import { HttpMethod } from '../types';
+import { JsonCompatible } from '../types';
 
 export class Resource<T = unknown> {
   fetched: boolean = false;
@@ -8,13 +9,7 @@ export class Resource<T = unknown> {
 
   constructor(
     readonly url: string,
-    readonly method:
-      | 'get'
-      | 'post'
-      | 'put'
-      | 'delete'
-      | 'patch'
-      | 'options' = 'get',
+    readonly method: HttpMethod = 'get',
     readonly body?: Record<string, any>,
     readonly params?: Record<string, any>,
     readonly makeParams?: () => Record<string, any>,
@@ -62,7 +57,7 @@ export const createResource = ({
   placeholder,
 }: {
   url: string;
-  method?: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
+  method?: HttpMethod;
   body?: Record<string, any>;
   params?: Record<string, any>;
   makeParams?: () => Record<string, any>;

@@ -1,5 +1,6 @@
 import { straw } from '../shared';
-import { JsonCompatible } from '../types/json';
+import { HttpMethod } from '../types';
+import { JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 
 /**
@@ -19,7 +20,7 @@ export const api = async <T = unknown>({
   cache,
 }: {
   url: string;
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options';
+  method: HttpMethod;
   body?: Record<string, any>;
   params?: Record<string, any>;
   cache?: JsonCompatible;
