@@ -1,3 +1,4 @@
+import { an } from 'vitest/dist/chunks/reporters.6vxQttCV';
 import { Resource } from '../resource';
 
 export class ListResource extends Resource {
@@ -41,7 +42,7 @@ export class ListResource extends Resource {
  * @param doctype - Document type.
  * @returns `ListResource`
  */
-export function createListResource({
+export const createListResource = ({
   doctype,
   fields,
   group,
@@ -58,7 +59,7 @@ export function createListResource({
   };
   start?: number;
   limit?: number;
-}) {
+}) => {
   const url = '/api/resource/' + doctype;
   const params = {
     fields: fields,
@@ -68,7 +69,7 @@ export function createListResource({
     limit_start: start,
     as_dict: true,
   };
-  const placeholder = [];
+  const placeholder: any[] = [];
 
   return new ListResource(
     url,
@@ -78,8 +79,4 @@ export function createListResource({
     undefined,
     placeholder,
   );
-}
-
-createListResource({
-  doctype: 'User',
-});
+};

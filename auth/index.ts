@@ -6,47 +6,47 @@ import { api } from '../api';
  * @param password - Password to login with.
  * @returns Promise
  */
-export async function login({
+export const login = async ({
   username,
   password,
 }: {
   username: string;
   password: string;
-}) {
+}) => {
   return api({
     url: 'login',
     method: 'post',
-    data: {
+    body: {
       usr: username,
       pwd: password,
     },
   })
     .then(() => 'Successfully logged in')
     .catch(() => 'Failed to log in');
-}
+};
 
 /**
  * Logout from Frappe server.
  * @returns Promise
  */
-export async function logout() {
+export const logout = async () => {
   return api({
     url: 'logout',
     method: 'post',
   })
     .then(() => 'Successfully logged out')
     .catch(() => 'Failed to log out');
-}
+};
 
 /**
  * Get logged in user.
  * @returns Logged in user's id
  */
-export async function currentUser() {
+export const currentUser = async () => {
   return api({
     url: 'frappe.auth.get_logged_user',
     method: 'get',
   })
     .then((res) => res.data.message as string)
     .catch(() => 'Failed to get user');
-}
+};

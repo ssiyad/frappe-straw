@@ -3,21 +3,13 @@ export { createDocumentResource } from './document-resource';
 export { createListResource } from './list-resource';
 export { createResource } from './resource';
 
-import { AxiosInstance } from 'axios';
 import { createAxios } from './axios';
+import { straw } from './shared';
 
-declare global {
-  interface Window {
-    straw: {
-      client: AxiosInstance;
-    };
-  }
-}
-
-export function init(args: {
+export const init = (args: {
   url: string;
   token?: () => string;
   tokenType?: 'Bearer' | 'token';
-}) {
-  window.straw.client = createAxios(args);
-}
+}) => {
+  straw.client = createAxios(args);
+};

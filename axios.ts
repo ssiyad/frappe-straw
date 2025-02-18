@@ -2,8 +2,7 @@ import axios, {
   AxiosInstance,
   AxiosResponse,
   RawAxiosRequestHeaders,
-} from "axios";
-import { version as FRAPPE_CLIENT_VERSION } from "./package.json";
+} from 'axios';
 
 declare global {
   interface Window {
@@ -11,14 +10,13 @@ declare global {
   }
 }
 
-const HEADER_SITE_NAME = "X-Frappe-Site-Name";
-const HEADER_CSRF_TOKEN = "X-Frappe-CSRF-Token";
-const HEADER_FRAPPE_CLIENT_VERSION = "X-Frappe-Client-Version";
+const HEADER_SITE_NAME = 'X-Frappe-Site-Name';
+const HEADER_CSRF_TOKEN = 'X-Frappe-CSRF-Token';
 
 type Args = {
   url: string;
   token?: () => string;
-  tokenType?: "Bearer" | "token";
+  tokenType?: 'Bearer' | 'token';
 };
 
 /**
@@ -50,18 +48,17 @@ export const createAxios = (args: Args): AxiosInstance => {
 const headers = (args: Args): RawAxiosRequestHeaders => {
   // Init default headers.
   const headers: RawAxiosRequestHeaders = {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
-    [HEADER_FRAPPE_CLIENT_VERSION]: FRAPPE_CLIENT_VERSION,
+    Accept: 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
   };
 
   // Set token if provided.
   if (args.tokenType && args.token) {
-    headers.Authorization = [args.tokenType, args.token()].join(" ");
+    headers.Authorization = [args.tokenType, args.token()].join(' ');
   }
 
   // In case of server environments, return headers.
-  if (typeof window == "undefined" || typeof document == "undefined") {
+  if (typeof window == 'undefined' || typeof document == 'undefined') {
     return headers;
   }
 
@@ -74,7 +71,7 @@ const headers = (args: Args): RawAxiosRequestHeaders => {
   }
 
   // Set CSRF token if available.
-  if (window.csrf_token && window.csrf_token !== "{{ csrf_token }}") {
+  if (window.csrf_token && window.csrf_token !== '{{ csrf_token }}') {
     headers[HEADER_CSRF_TOKEN] = window.csrf_token;
   }
 

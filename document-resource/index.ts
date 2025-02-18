@@ -51,13 +51,13 @@ export class DocumentResource extends Resource {
  * @param docname - Document name.
  * @returns `DocumentResource`
  */
-export function createDocumentResource({
+export const createDocumentResource = ({
   doctype,
   docname,
 }: {
   doctype: string;
   docname: string;
-}) {
+}) => {
   const url = '/api/resource/' + doctype + '/' + docname;
   return new DocumentResource(url);
-}
+};
