@@ -29,8 +29,7 @@ export class Resource {
       url: this.url,
       method: this.method,
       body: this.body,
-      params: this.params,
-      makeParams: this.makeParams,
+      params: this.makeParams ? this.makeParams() : this.params,
     }).then((response) => {
       this.data = response.data;
       this.fetched = true;

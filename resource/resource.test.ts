@@ -78,3 +78,16 @@ test('Internal Method with Params', () => {
   expect(resource.method).toBe('post');
   expect(resource.params).toEqual({ key: 'value' });
 });
+
+test('Internal Method with Make Params', () => {
+  const resource = createResource({
+    url: 'an.internal.url',
+    method: 'post',
+    makeParams: () => ({ key: 'value' }),
+  });
+
+  expect(resource.url).toBe('/api/method/an.internal.url');
+  expect(resource.method).toBe('post');
+  expect(resource.makeParams).toBeInstanceOf(Function);
+  expect(resource.makeParams?.()).toEqual({ key: 'value' });
+});
