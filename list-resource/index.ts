@@ -1,7 +1,6 @@
-import { an } from 'vitest/dist/chunks/reporters.6vxQttCV';
 import { Resource } from '../resource';
 
-export class ListResource extends Resource {
+export class ListResource<T> extends Resource<T[]> {
   get currentPage() {
     // If `limit_start` and `limit` are not provided, default to page 1
     if (!this.params || !this.params.limit_start || !this.params.limit) {
@@ -42,7 +41,7 @@ export class ListResource extends Resource {
  * @param doctype - Document type.
  * @returns `ListResource`
  */
-export const createListResource = ({
+export const createListResource = <T = unknown>({
   doctype,
   fields,
   group,
@@ -51,11 +50,11 @@ export const createListResource = ({
   limit,
 }: {
   doctype: string;
-  fields?: string[];
-  group?: string;
+  fields?: (keyof T)[] | '*';
+  group?: keyof T;
   sort?: {
-    field: string;
-    direction: string;
+    field: keyof T;
+    direction: 'asc' | 'desc';
   };
   start?: number;
   limit?: number;
@@ -64,14 +63,14 @@ export const createListResource = ({
   const params = {
     fields: fields,
     group_by: group,
-    order_by: sort && sort.field + ' ' + sort.direction,
+    order_by: sort && sort.field.toString() + ' ' + sort.direction,
     limit: limit,
     limit_start: start,
     as_dict: true,
   };
-  const placeholder: any[] = [];
+  const placeholder: T[] = [];
 
-  return new ListResource(
+  return new ListResource<T>(
     url,
     undefined,
     undefined,

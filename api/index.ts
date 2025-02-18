@@ -11,7 +11,7 @@ import { getCacheKey } from './cache';
  * @param cache - Whether to cache the response.
  * @returns Promise
  */
-export const api = async ({
+export const api = async <T = unknown>({
   url,
   method,
   params,
@@ -23,14 +23,12 @@ export const api = async ({
   body?: Record<string, any>;
   params?: Record<string, any>;
   cache?: JsonCompatible;
-}) => {
+}): Promise<T> => {
   const cacheKey = getCacheKey(cache, url, method, params, body);
 
   if (cache) {
     const cached = straw.cache.get(cacheKey);
-    if (cached) {
-      return Promise.resolve(cached);
-    }
+    if (cached) return cached as T;
   }
 
   return straw.client
@@ -42,9 +40,7 @@ export const api = async ({
       data: body,
     })
     .then(({ data }) => {
-      if (cache) {
-        straw.cache.set(cacheKey, data);
-      }
-      return data;
+      if (cache) straw.cache.set(cacheKey, data);
+      return data as T;
     });
 };

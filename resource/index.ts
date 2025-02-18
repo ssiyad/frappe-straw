@@ -1,10 +1,10 @@
 import { api } from '../api';
 import { JsonCompatible } from '../types/json';
 
-export class Resource {
-  data: any;
+export class Resource<T = unknown> {
   fetched: boolean = false;
   loading: boolean = false;
+  data!: T;
 
   constructor(
     readonly url: string,
@@ -18,7 +18,7 @@ export class Resource {
     readonly body?: Record<string, any>,
     readonly params?: Record<string, any>,
     readonly makeParams?: () => Record<string, any>,
-    readonly placeholder?: any,
+    readonly placeholder?: T,
     readonly cache?: JsonCompatible,
   ) {
     const prefix = '/api/method/';
@@ -26,29 +26,30 @@ export class Resource {
     const full = external || url.startsWith('/');
     this.url = full ? url : prefix + url;
     this.method = method ?? 'get';
-    this.data = placeholder;
+    if (placeholder) this.data = placeholder;
     this.refresh();
   }
 
   /** Refresh the resource. Fetch latest data. */
-  refresh() {
+  async refresh() {
     this.loading = true;
-    this.data = api({
+    this.data = await api<T>({
       url: this.url,
       method: this.method,
       params: this.makeParams ? this.makeParams() : this.params,
       body: this.body,
       cache: this.cache,
-    }).then((response) => {
-      this.data = response.data;
+    }).then((data) => {
+      this.data = data;
       this.fetched = true;
       this.loading = false;
+      return data;
     });
   }
 
   /** Reset resource data to `placeholder` */
   reset() {
-    this.data = this.placeholder;
+    if (this.placeholder) this.data = this.placeholder;
   }
 }
 

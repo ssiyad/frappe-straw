@@ -1,7 +1,7 @@
 import { api } from '../api';
 import { Resource } from '../resource';
 
-export class DocumentResource extends Resource {
+export class DocumentResource<T> extends Resource<T> {
   /**
    * Save this document. If successful, refresh the document.
    */
@@ -51,7 +51,7 @@ export class DocumentResource extends Resource {
  * @param docname - Document name.
  * @returns `DocumentResource`
  */
-export const createDocumentResource = ({
+export const createDocumentResource = <T>({
   doctype,
   docname,
 }: {
@@ -59,5 +59,5 @@ export const createDocumentResource = ({
   docname: string;
 }) => {
   const url = '/api/resource/' + doctype + '/' + docname;
-  return new DocumentResource(url);
+  return new DocumentResource<T>(url);
 };
