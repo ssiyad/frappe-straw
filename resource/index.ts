@@ -1,4 +1,5 @@
 import { api } from '../api';
+import { JsonCompatible } from '../types/json';
 
 export class Resource {
   data: any;
@@ -18,6 +19,7 @@ export class Resource {
     readonly params?: Record<string, any>,
     readonly makeParams?: () => Record<string, any>,
     readonly placeholder?: any,
+    readonly cache?: JsonCompatible,
   ) {
     const prefix = '/api/method/';
     const external = url.startsWith('http');
@@ -34,8 +36,9 @@ export class Resource {
     this.data = api({
       url: this.url,
       method: this.method,
-      body: this.body,
       params: this.makeParams ? this.makeParams() : this.params,
+      body: this.body,
+      cache: this.cache,
     }).then((response) => {
       this.data = response.data;
       this.fetched = true;
@@ -63,6 +66,7 @@ export const createResource = ({
   params?: Record<string, any>;
   makeParams?: () => Record<string, any>;
   placeholder?: any;
+  cache?: JsonCompatible;
 }) => {
   return new Resource(url, method, body, params, makeParams, placeholder);
 };
