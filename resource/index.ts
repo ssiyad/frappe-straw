@@ -1,6 +1,5 @@
 import { api } from '../api';
-import { HttpMethod } from '../types';
-import { JsonCompatible } from '../types';
+import { HttpMethod, JsonCompatible } from '../types';
 
 export class Resource<T = unknown> {
   fetched: boolean = false;

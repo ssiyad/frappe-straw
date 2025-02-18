@@ -1,6 +1,5 @@
 import { straw } from '../shared';
-import { HttpMethod } from '../types';
-import { JsonCompatible } from '../types';
+import { HttpMethod, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 
 /**
