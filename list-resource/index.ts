@@ -1,4 +1,6 @@
 import { Resource } from '../resource';
+import { ListFilter } from '../types';
+import { tranformFilter } from './filters';
 
 export class ListResource<T> extends Resource<T[]> {
   get currentPage() {
@@ -44,6 +46,7 @@ export class ListResource<T> extends Resource<T[]> {
 export const createListResource = <T = unknown>({
   doctype,
   fields,
+  filters,
   group,
   sort,
   start,
@@ -51,6 +54,7 @@ export const createListResource = <T = unknown>({
 }: {
   doctype: string;
   fields?: (keyof T)[] | '*';
+  filters?: ListFilter<T>;
   group?: keyof T;
   sort?: {
     field: keyof T;
@@ -62,6 +66,7 @@ export const createListResource = <T = unknown>({
   const url = '/api/resource/' + doctype;
   const params = {
     fields: fields,
+    filters: filters && tranformFilter(filters),
     group_by: group,
     order_by: sort && sort.field.toString() + ' ' + sort.direction,
     limit: limit,
