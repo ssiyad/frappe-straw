@@ -1,6 +1,20 @@
-## Frappe Straw
-A minimal, pleasant and easy to use [Frappe](https://frappe.io/framework)
-client.
+<div align='center'>
+  <h1>Frappe Straw</h1>
+  <strong>A minimal, pleasant and easy to use <a
+    href='https://frappe.io/framework' target='_blank'>Frappe</a></strong>
+  client.
+  <div>Powered By</div>
+  <a href='https://bytsolv.com/' target='_blank'>
+    <picture>
+      <source media="(prefers-color-scheme: dark)"
+        srcset="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-dark.svg">
+      <source media="(prefers-color-scheme: light)"
+        srcset="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-light.svg">
+      <img alt="BytSolv Logo"
+        src="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-light.svg">
+    </picture>
+  </a>
+</div>
 
 ## Warning!
 This package is in very active development. Components may or may not work as
