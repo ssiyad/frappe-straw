@@ -2,7 +2,22 @@ import { Resource } from '../resource';
 import { ListFilter } from '../types';
 import { tranformFilter } from './filters';
 
-export class ListResource<T> extends Resource<T[]> {
+export class ListResource<T> extends Resource<{
+  data: T[];
+  count: number;
+}> {
+  result!: T[];
+  count!: number;
+
+  // Extract result and count from response.
+  async refresh() {
+    return super.refresh().then((data) => {
+      this.result = data.data;
+      this.count = data.count;
+      return data;
+    });
+  }
+
   get currentPage() {
     // If `limit_start` and `limit` are not provided, default to page 1
     if (!this.params || !this.params.limit_start || !this.params.limit) {
@@ -73,7 +88,10 @@ export const createListResource = <T = unknown>({
     limit_start: start,
     as_dict: true,
   };
-  const placeholder: T[] = [];
+  const placeholder = {
+    data: [],
+    count: 0,
+  };
 
   return new ListResource<T>(
     url,

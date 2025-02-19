@@ -27,7 +27,7 @@ export class Resource<T = unknown> {
   /** Refresh the resource. Fetch latest data. */
   async refresh() {
     this.loading = true;
-    this.data = await api<T>({
+    return await api<T>({
       url: this.url,
       method: this.method,
       params: this.makeParams ? this.makeParams() : this.params,

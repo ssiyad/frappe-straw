@@ -1,8 +1,4 @@
-import axios, {
-  AxiosInstance,
-  AxiosResponse,
-  RawAxiosRequestHeaders,
-} from 'axios';
+import axios, { AxiosInstance, RawAxiosRequestHeaders } from 'axios';
 
 declare global {
   interface Window {
@@ -32,9 +28,6 @@ export const createAxios = (args: Args): AxiosInstance => {
     headers: headers(args),
     withCredentials: true,
   });
-
-  // Add response interceptors.
-  a.interceptors.response.use(exRes, handleErr);
 
   return a;
 };
@@ -76,18 +69,4 @@ const headers = (args: Args): RawAxiosRequestHeaders => {
   }
 
   return headers;
-};
-
-/**
- * Extract actual response from axios response.
- */
-const exRes = (r: AxiosResponse) => {
-  return r.data.message;
-};
-
-/**
- * Handle error from axios response.
- */
-const handleErr = (e: any) => {
-  return Promise.reject(e);
 };

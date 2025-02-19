@@ -2,7 +2,19 @@ import { api } from '../api';
 import { Resource } from '../resource';
 import { BaseDocument } from '../types';
 
-export class DocumentResource<T extends BaseDocument> extends Resource<T> {
+export class DocumentResource<T extends BaseDocument> extends Resource<{
+  data: T;
+}> {
+  result!: T;
+
+  // Extract actual data from response.
+  async refresh() {
+    return super.refresh().then((data) => {
+      this.result = data.data;
+      return data;
+    });
+  }
+
   /**
    * Save this document. If successful, refresh the document.
    */
