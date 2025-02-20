@@ -20,38 +20,37 @@ export interface Resource<T> {
 
 export function useResource<T>(
   url: string,
-  options?: UseResourceOptions<T>,
+  {
+    method = 'get',
+    body,
+    params,
+    placeholder,
+    cache,
+  }: UseResourceOptions<T> = {},
 ): Resource<T> {
-  const [data, setData] = useState<T | undefined>(options?.placeholder);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [fetched, setFetched] = useState<boolean>(false);
+  const [data, setData] = useState<T | undefined>(placeholder);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [fetched, setFetched] = useState(false);
 
-  const refresh = useCallback(() => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    api<T>({
-      url,
-      method: options?.method ?? 'get',
-      params: options?.params,
-      body: options?.body,
-      cache: options?.cache,
-    })
-      .then((response) => {
-        setData(response);
-        setFetched(true);
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [url, options]);
+    try {
+      const response = await api<T>({ url, method, params, body, cache });
+      setData(response);
+      setFetched(true);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Unknown error'));
+    } finally {
+      setLoading(false);
+    }
+  }, [url, method, body, params, cache]);
 
-  // Initial fetch
-  useEffect(refresh, [refresh]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  return { data, loading, error, fetched, refresh };
+  return { data, loading, error, fetched, refresh: fetchData };
 }
