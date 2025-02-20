@@ -1,8 +1,7 @@
 export { api } from './api';
-export { createDocumentResource } from './document-resource';
-export { createListResource } from './list-resource';
-export { createResource } from './resource';
-
+export { useDocumentResource } from './document-resource';
+export { useListResource } from './list-resource';
+export { useResource } from './resource';
 import { createAxios } from './axios';
 import { straw } from './shared';
 
