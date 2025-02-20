@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { api } from '../api';
 import { useResource } from '../resource';
 import { BaseDocument } from '../types';
@@ -13,36 +14,47 @@ interface DocumentResource<T extends BaseDocument> {
   cancel: () => Promise<void>;
 }
 
+const DOCUMENT_ACTION_URL = 'frappe.desk.form.save.savedocs';
+
 /**
- * Custom hook for managing a document resource.
+ * Hook for managing a document resource.
  * @param doctype - Document type.
  * @param docname - Document name.
- * @returns `DocumentResource`
+ * @returns `DocumentResource<T>`
  */
 export function useDocumentResource<T extends BaseDocument>(
   doctype: string,
   docname: string,
 ): DocumentResource<T> {
-  const url = `/api/resource/${doctype}/${docname}`;
+  const url = useMemo(
+    () => `/api/resource/${doctype}/${docname}`,
+    [doctype, docname],
+  );
+
   const { data, loading, error, fetched, refresh } = useResource<{ data: T }>(
     url,
   );
 
-  // Actual document result extracted from API response
+  // Extract actual document from API response
   const result = data?.data;
 
-  const performAction = async (action: 'Save' | 'Submit' | 'Cancel') => {
-    if (!result) return Promise.reject(new Error('No document data available'));
+  const performAction = useCallback(
+    async (action: 'Save' | 'Submit' | 'Cancel') => {
+      if (!result) throw new Error('No document data available');
 
-    return api({
-      url: 'frappe.desk.form.save.savedocs',
-      method: 'post',
-      body: {
-        doc: JSON.stringify(result),
-        action,
-      },
-    }).then(refresh);
-  };
+      await api({
+        url: DOCUMENT_ACTION_URL,
+        method: 'post',
+        body: {
+          doc: JSON.stringify(result),
+          action,
+        },
+      });
+
+      refresh();
+    },
+    [result, refresh],
+  );
 
   return {
     data: result,
