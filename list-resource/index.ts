@@ -1,71 +1,27 @@
-import { Resource } from '../resource';
+import { Resource, useResource } from '../resource';
 import { ListFilter } from '../types';
 import { tranformFilter } from './filters';
 
-export class ListResource<T> extends Resource<{
-  data: T[];
+interface ListResource<T> extends Resource<T[]> {
   count: number;
-}> {
-  result!: T[];
-  count!: number;
-
-  // Extract result and count from response.
-  async refresh() {
-    return super.refresh().then((data) => {
-      this.result = data.data;
-      this.count = data.count;
-      return data;
-    });
-  }
-
-  get currentPage() {
-    // If `limit_start` and `limit` are not provided, default to page 1
-    if (!this.params || !this.params.limit_start || !this.params.limit) {
-      return 1;
-    }
-
-    // Calculate page number
-    return Math.floor(this.params.limit_start / this.params.limit) + 1;
-  }
-
-  /**
-   * Fetch next page of data.
-   */
-  nextPage() {
-    if (this.params && this.params.limit && this.params.limit_start) {
-      const pageNumber = this.currentPage + 1;
-      const start = (pageNumber - 1) * this.params.limit;
-      this.params.limit_start = start;
-      this.refresh();
-    }
-  }
-
-  /**
-   * Fetch previous page of data.
-   */
-  previousPage() {
-    if (this.params && this.params.limit && this.params.limit_start) {
-      const pageNumber = this.currentPage - 1;
-      const start = (pageNumber - 1) * this.params.limit;
-      this.params.limit_start = start;
-      this.refresh();
-    }
-  }
+  nextPage: () => void;
+  previousPage: () => void;
+  currentPage: number;
 }
 
 /**
- * Create a `ListResource`.
+ * Custom hook to manage a list resource with pagination.
  * @param doctype - Document type.
- * @returns `ListResource`
+ * @returns `ListResource<T>`
  */
-export const createListResource = <T = unknown>({
+export function useListResource<T>({
   doctype,
   fields,
   filters,
   group,
   sort,
-  start,
-  limit,
+  start = 0,
+  limit = 10,
 }: {
   doctype: string;
   fields?: (keyof T)[] | '*';
@@ -77,28 +33,57 @@ export const createListResource = <T = unknown>({
   };
   start?: number;
   limit?: number;
-}) => {
-  const url = '/api/resource/' + doctype;
+}): ListResource<T> {
+  const url = `/api/resource/${doctype}`;
   const params = {
-    fields: fields,
+    fields,
     filters: filters && tranformFilter(filters),
     group_by: group,
-    order_by: sort && sort.field.toString() + ' ' + sort.direction,
-    limit: limit,
+    order_by: sort && `${sort.field.toString()} ${sort.direction}`,
+    limit,
     limit_start: start,
     as_dict: true,
   };
-  const placeholder = {
-    data: [],
-    count: 0,
+
+  const { data, loading, error, fetched, refresh } = useResource<{
+    data: T[];
+    count: number;
+  }>(url, { params });
+
+  // Extracting data
+  const result = data?.data ?? [];
+  const count = data?.count ?? 0;
+
+  const currentPage = params.limit_start
+    ? Math.floor(params.limit_start / (params.limit || 10)) + 1
+    : 1;
+
+  const updateStart = (newStart: number) => {
+    params.limit_start = newStart;
+    refresh();
   };
 
-  return new ListResource<T>(
-    url,
-    undefined,
-    undefined,
-    params,
-    undefined,
-    placeholder,
-  );
-};
+  const nextPage = () => {
+    if (params.limit && params.limit_start !== undefined) {
+      updateStart(currentPage * params.limit);
+    }
+  };
+
+  const previousPage = () => {
+    if (params.limit && params.limit_start !== undefined) {
+      updateStart((currentPage - 2) * params.limit);
+    }
+  };
+
+  return {
+    data: result,
+    loading,
+    error,
+    fetched,
+    refresh,
+    count,
+    nextPage,
+    previousPage,
+    currentPage,
+  };
+}

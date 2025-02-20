@@ -1,67 +1,57 @@
+import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api';
 import { HttpMethod, JsonCompatible } from '../types';
 
-export class Resource<T = unknown> {
-  fetched: boolean = false;
-  loading: boolean = false;
-  data!: T;
-
-  constructor(
-    readonly url: string,
-    readonly method: HttpMethod = 'get',
-    readonly body?: Record<string, any>,
-    readonly params?: Record<string, any>,
-    readonly makeParams?: () => Record<string, any>,
-    readonly placeholder?: T,
-    readonly cache?: JsonCompatible,
-  ) {
-    const prefix = '/api/method/';
-    const external = url.startsWith('http');
-    const full = external || url.startsWith('/');
-    this.url = full ? url : prefix + url;
-    this.method = method ?? 'get';
-    if (placeholder) this.data = placeholder;
-    this.refresh();
-  }
-
-  /** Refresh the resource. Fetch latest data. */
-  async refresh() {
-    this.loading = true;
-    return await api<T>({
-      url: this.url,
-      method: this.method,
-      params: this.makeParams ? this.makeParams() : this.params,
-      body: this.body,
-      cache: this.cache,
-    }).then((data) => {
-      this.data = data;
-      this.fetched = true;
-      this.loading = false;
-      return data;
-    });
-  }
-
-  /** Reset resource data to `placeholder` */
-  reset() {
-    if (this.placeholder) this.data = this.placeholder;
-  }
-}
-
-export const createResource = ({
-  url,
-  method,
-  body,
-  params,
-  makeParams,
-  placeholder,
-}: {
-  url: string;
+interface UseResourceOptions<T> {
   method?: HttpMethod;
   body?: Record<string, any>;
   params?: Record<string, any>;
-  makeParams?: () => Record<string, any>;
-  placeholder?: any;
+  placeholder?: T;
   cache?: JsonCompatible;
-}) => {
-  return new Resource(url, method, body, params, makeParams, placeholder);
-};
+}
+
+export interface Resource<T> {
+  data: T | undefined;
+  loading: boolean;
+  error: Error | null;
+  fetched: boolean;
+  refresh: () => void;
+}
+
+export function useResource<T>(
+  url: string,
+  options?: UseResourceOptions<T>,
+): Resource<T> {
+  const [data, setData] = useState<T | undefined>(options?.placeholder);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [fetched, setFetched] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refresh = useCallback(() => {
+    setLoading(true);
+    setError(null);
+
+    api<T>({
+      url,
+      method: options?.method ?? 'get',
+      params: options?.params,
+      body: options?.body,
+      cache: options?.cache,
+    })
+      .then((response) => {
+        setData(response);
+        setFetched(true);
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [url, options]);
+
+  // Initial fetch
+  useEffect(refresh, [refresh]);
+
+  return { data, loading, error, fetched, refresh };
+}
