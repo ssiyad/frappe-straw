@@ -1,4 +1,5 @@
-import { straw } from '../shared';
+import { useContext } from 'react';
+import { StrawContext } from '../context';
 import { HttpMethod, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 
@@ -24,6 +25,7 @@ export const api = async <T = unknown>({
   params?: Record<string, any>;
   cache?: JsonCompatible;
 }) => {
+  const straw = useContext(StrawContext);
   const cacheKey = getCacheKey(cache, url, method, params, body);
 
   if (cache) {
