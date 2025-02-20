@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitest/config';
 
-defineConfig({
+export default defineConfig({
   test: {
     coverage: {
-      reporter: ['text', 'json-summary'],
+      reporter: ['text', 'json', 'json-summary'],
     },
   },
 });
