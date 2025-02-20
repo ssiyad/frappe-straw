@@ -23,7 +23,7 @@ export const api = async <T = unknown>({
   body?: Record<string, any>;
   params?: Record<string, any>;
   cache?: JsonCompatible;
-}): Promise<T> => {
+}) => {
   const cacheKey = getCacheKey(cache, url, method, params, body);
 
   if (cache) {

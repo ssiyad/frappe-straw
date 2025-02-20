@@ -1,76 +1,57 @@
 import { api } from '../api';
-import { Resource } from '../resource';
+import { useResource } from '../resource';
 import { BaseDocument } from '../types';
 
-export class DocumentResource<T extends BaseDocument> extends Resource<{
-  data: T;
-}> {
-  result!: T;
-
-  // Extract actual data from response.
-  async refresh() {
-    return super.refresh().then((data) => {
-      this.result = data.data;
-      return data;
-    });
-  }
-
-  /**
-   * Save this document. If successful, refresh the document.
-   */
-  async save() {
-    return api({
-      url: 'frappe.desk.form.save.savedocs',
-      method: 'post',
-      body: {
-        doc: JSON.stringify(this.data),
-        action: 'Save',
-      },
-    }).then(this.refresh);
-  }
-
-  /**
-   * Submit this document. If successful, refresh the document.
-   */
-  async submit() {
-    return api({
-      url: 'frappe.desk.form.save.savedocs',
-      method: 'post',
-      body: {
-        doc: JSON.stringify(this.data),
-        action: 'Submit',
-      },
-    }).then(this.refresh);
-  }
-
-  /**
-   * Cancel this document. If successful, refresh the document.
-   */
-  async cancel() {
-    return api({
-      url: 'frappe.desk.form.save.savedocs',
-      method: 'post',
-      body: {
-        doc: JSON.stringify(this.data),
-        action: 'Cancel',
-      },
-    }).then(this.refresh);
-  }
+interface DocumentResource<T extends BaseDocument> {
+  data: T | undefined;
+  loading: boolean;
+  error: Error | null;
+  fetched: boolean;
+  refresh: () => void;
+  save: () => Promise<void>;
+  submit: () => Promise<void>;
+  cancel: () => Promise<void>;
 }
 
 /**
- * Create a `DocumentResource`.
+ * Custom hook for managing a document resource.
  * @param doctype - Document type.
  * @param docname - Document name.
  * @returns `DocumentResource`
  */
-export const createDocumentResource = <T extends BaseDocument>({
-  doctype,
-  docname,
-}: {
-  doctype: string;
-  docname: string;
-}) => {
-  const url = '/api/resource/' + doctype + '/' + docname;
-  return new DocumentResource<T>(url);
-};
+export function useDocumentResource<T extends BaseDocument>(
+  doctype: string,
+  docname: string,
+): DocumentResource<T> {
+  const url = `/api/resource/${doctype}/${docname}`;
+  const { data, loading, error, fetched, refresh } = useResource<{ data: T }>(
+    url,
+  );
+
+  // Actual document result extracted from API response
+  const result = data?.data;
+
+  const performAction = async (action: 'Save' | 'Submit' | 'Cancel') => {
+    if (!result) return Promise.reject(new Error('No document data available'));
+
+    return api({
+      url: 'frappe.desk.form.save.savedocs',
+      method: 'post',
+      body: {
+        doc: JSON.stringify(result),
+        action,
+      },
+    }).then(refresh);
+  };
+
+  return {
+    data: result,
+    loading,
+    error,
+    fetched,
+    refresh,
+    save: () => performAction('Save'),
+    submit: () => performAction('Submit'),
+    cancel: () => performAction('Cancel'),
+  };
+}
