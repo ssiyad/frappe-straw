@@ -15,7 +15,7 @@ test('Basic', async () => {
     },
   });
 
-  const response = await api.api({
+  const response = await api.useApi({
     url: '/an/internal/url',
     method: 'get',
   });

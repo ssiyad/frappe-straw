@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { api } from '../api';
+import { useApi } from '../api';
 import { useResource } from '../resource';
 import { BaseDocument } from '../types';
 
@@ -34,6 +34,7 @@ export function useDocumentResource<T extends BaseDocument>(
   const { data, loading, error, fetched, refresh } = useResource<{ data: T }>(
     url,
   );
+  const apiRequest = useApi();
 
   // Extract actual document from API response
   const result = data?.data;
@@ -42,7 +43,7 @@ export function useDocumentResource<T extends BaseDocument>(
     async (action: 'Save' | 'Submit' | 'Cancel') => {
       if (!result) throw new Error('No document data available');
 
-      await api({
+      await apiRequest({
         url: DOCUMENT_ACTION_URL,
         method: 'post',
         body: {
@@ -53,7 +54,7 @@ export function useDocumentResource<T extends BaseDocument>(
 
       refresh();
     },
-    [result, refresh],
+    [apiRequest, result, refresh],
   );
 
   return {

@@ -1,4 +1,4 @@
-export { api } from './api';
+export { useApi } from './api';
 export { Straw } from './context';
 export { useDocumentResource } from './document-resource';
 export { useListResource } from './list-resource';

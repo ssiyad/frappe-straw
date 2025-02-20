@@ -1,48 +1,57 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
 import { HttpMethod, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 
 /**
- * Make an API request.
- * @param url - URL to make request to.
- * @param method - HTTP method to use.
- * @param body - Data to send in request.
- * @param params - Query parameters to send in request.
- * @param cache - Whether to cache the response.
- * @returns Promise
+ * API request parameters.
  */
-export const api = async <T = unknown>({
-  url,
-  method,
-  params,
-  body,
-  cache,
-}: {
+interface ApiRequest<T = unknown> {
   url: string;
-  method: HttpMethod;
+  method?: HttpMethod;
   body?: Record<string, any>;
   params?: Record<string, any>;
   cache?: JsonCompatible;
-}) => {
-  const straw = useContext(StrawContext);
-  const cacheKey = getCacheKey(cache, url, method, params, body);
+}
 
-  if (cache) {
-    const cached = straw.cache.get(cacheKey);
-    if (cached) return cached as T;
-  }
+/**
+ * Hook to make an API request with caching.
+ */
+export const useApi = <T = unknown>() => {
+  const { client, cache: cacheStore } = useContext(StrawContext);
 
-  return straw.client
-    .request({
-      baseURL: url.startsWith('http') ? '' : undefined,
+  return useCallback(
+    async ({
       url,
-      method,
+      method = 'get',
       params,
-      data: body,
-    })
-    .then(({ data }) => {
-      if (cache) straw.cache.set(cacheKey, data);
-      return data as T;
-    });
+      body,
+      cache,
+    }: ApiRequest<T>): Promise<T> => {
+      const cacheKey = cache
+        ? getCacheKey(cache, url, method, params, body)
+        : null;
+
+      if (cacheKey && cacheStore.has(cacheKey)) {
+        return cacheStore.get(cacheKey) as T;
+      }
+
+      try {
+        const response = await client.request<T>({
+          baseURL: url.startsWith('http') ? '' : undefined,
+          url,
+          method,
+          params,
+          data: body,
+        });
+
+        if (cacheKey) cacheStore.set(cacheKey, response.data);
+
+        return response.data;
+      } catch (error) {
+        throw error instanceof Error ? error : new Error(String(error));
+      }
+    },
+    [client, cacheStore],
+  );
 };

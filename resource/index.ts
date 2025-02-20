@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api } from '../api';
+import { useApi } from '../api';
 import { HttpMethod, JsonCompatible } from '../types';
 
 interface UseResourceOptions<T> {
@@ -28,6 +28,7 @@ export function useResource<T>(
     cache,
   }: UseResourceOptions<T> = {},
 ): Resource<T> {
+  const apiRequest = useApi<T>();
   const [data, setData] = useState<T | undefined>(placeholder);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -38,7 +39,7 @@ export function useResource<T>(
     setError(null);
 
     try {
-      const response = await api<T>({ url, method, params, body, cache });
+      const response = await apiRequest({ url, method, params, body, cache });
       setData(response);
       setFetched(true);
     } catch (err) {
@@ -46,7 +47,7 @@ export function useResource<T>(
     } finally {
       setLoading(false);
     }
-  }, [url, method, body, params, cache]);
+  }, [apiRequest, url, method, body, params, cache]);
 
   useEffect(() => {
     fetchData();
