@@ -1,28 +1,9 @@
+import { useMemo, useState } from 'react';
 import { Resource, useResource } from '../resource';
 import { ListFilter } from '../types';
 import { tranformFilter } from './filters';
 
-interface ListResource<T> extends Resource<T[]> {
-  count: number;
-  nextPage: () => void;
-  previousPage: () => void;
-  currentPage: number;
-}
-
-/**
- * Custom hook to manage a list resource with pagination.
- * @param doctype - Document type.
- * @returns `ListResource<T>`
- */
-export function useListResource<T>({
-  doctype,
-  fields,
-  filters,
-  group,
-  sort,
-  start = 0,
-  limit = 10,
-}: {
+interface UseListResourceOptions<T> {
   doctype: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
@@ -33,46 +14,61 @@ export function useListResource<T>({
   };
   start?: number;
   limit?: number;
-}): ListResource<T> {
-  const url = `/api/resource/${doctype}`;
-  const params = {
-    fields,
-    filters: filters && tranformFilter(filters),
-    group_by: group,
-    order_by: sort && `${sort.field.toString()} ${sort.direction}`,
-    limit,
-    limit_start: start,
-    as_dict: true,
-  };
+}
 
-  const { data, loading, error, fetched, refresh } = useResource<{
-    data: T[];
-    count: number;
-  }>(url, { params });
+interface ListResource<T> extends Resource<T[]> {
+  count: number;
+  nextPage: () => void;
+  previousPage: () => void;
+  currentPage: number;
+}
 
-  // Extracting data
+interface ApiResponse<T> {
+  data: T[];
+  count: number;
+}
+
+/**
+ * Hook to manage a list resource with pagination.
+ */
+export function useListResource<T>({
+  doctype,
+  fields,
+  filters,
+  group,
+  sort,
+  start = 0,
+  limit = 10,
+}: UseListResourceOptions<T>): ListResource<T> {
+  const [currentStart, setCurrentStart] = useState(start);
+  const url = useMemo(() => `/api/resource/${doctype}`, [doctype]);
+  const params = useMemo(
+    () => ({
+      fields,
+      filters: filters && tranformFilter(filters),
+      group_by: group,
+      order_by: sort && `${sort.field.toString()} ${sort.direction}`,
+      limit,
+      limit_start: currentStart,
+      as_dict: true,
+    }),
+    [fields, filters, group, sort, limit, currentStart],
+  );
+
+  const { data, loading, error, fetched, refresh } = useResource<
+    ApiResponse<T>
+  >(url, { params });
+
   const result = data?.data ?? [];
   const count = data?.count ?? 0;
-
-  const currentPage = params.limit_start
-    ? Math.floor(params.limit_start / (params.limit || 10)) + 1
-    : 1;
-
-  const updateStart = (newStart: number) => {
-    params.limit_start = newStart;
-    refresh();
-  };
+  const currentPage = Math.floor(currentStart / limit) + 1;
 
   const nextPage = () => {
-    if (params.limit && params.limit_start !== undefined) {
-      updateStart(currentPage * params.limit);
-    }
+    setCurrentStart((prev) => Math.min(prev + limit, count - limit));
   };
 
   const previousPage = () => {
-    if (params.limit && params.limit_start !== undefined) {
-      updateStart((currentPage - 2) * params.limit);
-    }
+    setCurrentStart((prev) => Math.max(prev - limit, 0));
   };
 
   return {
