@@ -6,7 +6,6 @@
   "repository": "git@github.com:ssiyad/frappe-straw.git",
   "author": "Sabu Siyad <hello@ssiyad.com>",
   "license": "GPL-3.0",
-  "private": false,
   "scripts": {
     "test": "vitest"
   },
