@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, RawAxiosRequestHeaders } from 'axios';
+import qs from 'qs';
 
 declare global {
   interface Window {
@@ -27,6 +28,11 @@ export const createAxios = (args: Args): AxiosInstance => {
     baseURL: args.url,
     headers: headers(args),
     withCredentials: true,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, {
+        arrayFormat: 'repeat',
+      });
+    },
   });
 
   return a;
