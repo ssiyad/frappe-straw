@@ -6,7 +6,7 @@ import { getCacheKey } from './cache';
 /**
  * API request parameters.
  */
-interface ApiRequest<T = unknown> {
+interface ApiRequest {
   url: string;
   method?: HttpMethod;
   body?: Record<string, any>;
@@ -27,7 +27,7 @@ export const useApi = <T = unknown>() => {
       params,
       body,
       cache,
-    }: ApiRequest<T>): Promise<T> => {
+    }: ApiRequest): Promise<T> => {
       const cacheKey = cache
         ? getCacheKey(cache, url, method, params, body)
         : null;
