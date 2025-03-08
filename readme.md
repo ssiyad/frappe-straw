@@ -3,17 +3,7 @@
   <strong>A minimal, pleasant and easy to use <a
     href='https://frappe.io/framework' target='_blank'>Frappe</a></strong>
   client.
-  <div>Powered By</div>
-  <a href='https://bytsolv.com/' target='_blank'>
-    <picture>
-      <source media="(prefers-color-scheme: dark)"
-        srcset="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-dark.svg">
-      <source media="(prefers-color-scheme: light)"
-        srcset="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-light.svg">
-      <img alt="BytSolv Logo"
-        src="https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-light.svg">
-    </picture>
-  </a>
+  <div>Made with ❤️ at <a href='https://bytsolv.com/' target='_blank'>BytSolv</a>.</div>
 </div>
 
 ## Warning!
