@@ -34,12 +34,22 @@ export function useResource<T>(
   const [error, setError] = useState<Error | null>(null);
   const [fetched, setFetched] = useState(false);
 
+  // Ensure URL is valid.
+  const validUrl =
+    url.startsWith('http') || url.startsWith('/') ? url : `/api/method/${url}`;
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await apiRequest({ url, method, params, body, cache });
+      const response = await apiRequest({
+        url: validUrl,
+        method,
+        params,
+        body,
+        cache,
+      });
       setData(response);
       setFetched(true);
     } catch (err) {
