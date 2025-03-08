@@ -6,7 +6,7 @@ import { useResource } from '../resource';
  * @param password - Password to login with.
  * @returns Promise
  */
-export const login = ({
+export const useLogin = ({
   username,
   password,
 }: {
@@ -26,7 +26,7 @@ export const login = ({
  * Logout from Frappe server.
  * @returns Promise
  */
-export const logout = async () => {
+export const useLogout = async () => {
   return useResource('logout', {
     method: 'post',
   });
@@ -36,7 +36,7 @@ export const logout = async () => {
  * Get logged in user.
  * @returns Logged in user's id
  */
-export const currentUser = async () => {
+export const useCurrentUser = async () => {
   return useResource('frappe.auth.get_logged_user', {
     method: 'get',
   });

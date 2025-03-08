@@ -39,6 +39,7 @@ export const Straw = ({
     () => createAxios({ url, token, tokenType }),
     [url, token, tokenType],
   );
+
   const cache = useMemo(
     () => new TTLCache({ max: 1000, ttl: 1000 * 60 * 5 }),
     [],
