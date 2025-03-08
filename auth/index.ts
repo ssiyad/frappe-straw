@@ -13,7 +13,11 @@ export const useLogin = ({
   username: string;
   password: string;
 }) => {
-  return useResource('login', {
+  return useResource<{
+    message: 'Logged In';
+    home_page: string;
+    full_name: string;
+  }>('login', {
     method: 'post',
     body: {
       usr: username,
