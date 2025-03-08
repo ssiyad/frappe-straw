@@ -49,9 +49,10 @@ export function useResource<T>(
     }
   }, [apiRequest, url, method, body, params, cache]);
 
+  // Fetch data on mount.
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   return { data, loading, error, fetched, refresh: fetchData };
 }
