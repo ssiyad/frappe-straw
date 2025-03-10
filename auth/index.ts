@@ -4,7 +4,7 @@ import { useResource } from '../resource';
  * Login to Frappe server, using provided credentials.
  * @param username - Username to login with.
  * @param password - Password to login with.
- * @returns Promise
+ * @returns `Resource` object.
  */
 export const useLogin = ({
   username,
@@ -13,17 +13,23 @@ export const useLogin = ({
   username: string;
   password: string;
 }) => {
-  return useResource<{
+  const resource = useResource<{
     message: 'Logged In';
     home_page: string;
     full_name: string;
   }>('login', {
     method: 'post',
+    fetchOnMount: false,
     body: {
       usr: username,
       pwd: password,
     },
   });
+
+  return {
+    ...resource,
+    login: resource.refresh,
+  };
 };
 
 /**
