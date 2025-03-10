@@ -55,6 +55,7 @@ export function useResource<T>(
       setData(response);
       setFetched(true);
     } catch (err) {
+      setData(undefined);
       setError(err instanceof Error ? err : new Error('Unknown error'));
     } finally {
       setLoading(false);
