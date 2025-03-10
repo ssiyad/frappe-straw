@@ -8,6 +8,7 @@ interface UseResourceOptions<T> {
   params?: Record<string, any>;
   placeholder?: T;
   cache?: JsonCompatible;
+  fetchOnMount?: boolean;
 }
 
 export interface Resource<T> {
@@ -26,6 +27,7 @@ export function useResource<T>(
     params,
     placeholder,
     cache,
+    fetchOnMount = true,
   }: UseResourceOptions<T> = {},
 ): Resource<T> {
   const apiRequest = useApi<T>();
@@ -61,7 +63,7 @@ export function useResource<T>(
 
   // Fetch data on mount.
   useEffect(() => {
-    fetchData();
+    if (fetchOnMount) fetchData();
   }, []);
 
   return { data, loading, error, fetched, refresh: fetchData };
