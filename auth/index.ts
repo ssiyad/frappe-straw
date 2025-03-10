@@ -36,10 +36,20 @@ export const useLogin = ({
  * Logout from Frappe server.
  * @returns Promise
  */
-export const useLogout = async () => {
-  return useResource('logout', {
+export const useLogout = () => {
+  const resource = useResource<{
+    message: string;
+    home_page: string;
+    full_name: string;
+  }>('logout', {
     method: 'post',
+    fetchOnMount: false,
   });
+
+  return {
+    ...resource,
+    logout: resource.refresh,
+  };
 };
 
 /**
