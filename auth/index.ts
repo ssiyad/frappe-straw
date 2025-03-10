@@ -46,8 +46,15 @@ export const useLogout = async () => {
  * Get logged in user.
  * @returns Logged in user's id
  */
-export const useCurrentUser = async () => {
-  return useResource('frappe.auth.get_logged_user', {
+export const useCurrentUser = () => {
+  const resource = useResource<{
+    message: string;
+  }>('frappe.auth.get_logged_user', {
     method: 'get',
   });
+
+  return {
+    ...resource,
+    data: resource.data?.message,
+  };
 };
