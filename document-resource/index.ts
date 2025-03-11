@@ -3,6 +3,10 @@ import { useApi } from '../api';
 import { useResource } from '../resource';
 import { BaseDocument } from '../types';
 
+interface UseDocumentResourceOptions {
+  fetchOnMount?: boolean;
+}
+
 interface DocumentResource<T extends BaseDocument> {
   data: T | undefined;
   loading: boolean;
@@ -25,6 +29,7 @@ const DOCUMENT_ACTION_URL = 'frappe.desk.form.save.savedocs';
 export function useDocumentResource<T extends BaseDocument>(
   doctype: string,
   docname: string,
+  { fetchOnMount = true }: UseDocumentResourceOptions = {},
 ): DocumentResource<T> {
   const url = useMemo(
     () => `/api/resource/${doctype}/${docname}`,
@@ -33,6 +38,9 @@ export function useDocumentResource<T extends BaseDocument>(
 
   const { data, loading, error, fetched, refresh } = useResource<{ data: T }>(
     url,
+    {
+      fetchOnMount,
+    },
   );
   const apiRequest = useApi();
 
