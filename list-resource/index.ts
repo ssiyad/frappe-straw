@@ -44,7 +44,7 @@ export function useListResource<T>({
   const url = useMemo(() => `/api/resource/${doctype}`, [doctype]);
   const params = useMemo(
     () => ({
-      fields,
+      fields: fields === '*' ? [fields] : fields,
       filters: filters && tranformFilter(filters),
       group_by: group,
       order_by: sort && `${sort.field.toString()} ${sort.direction}`,
