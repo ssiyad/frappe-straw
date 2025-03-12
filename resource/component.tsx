@@ -11,6 +11,5 @@ export const StrawResource = <T = JsonCompatible,>({
   options?: Parameters<typeof useResource<T>>[1];
   children: (resource: Resource<T>) => React.ReactNode;
 }) => {
-  const resource = useResource<T>(url, options);
-  return children(resource);
+  return children(useResource<T>(url, options));
 };
