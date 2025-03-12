@@ -1,2 +1,2 @@
 export { StrawResource } from './component';
-export { useResource } from './useResource';
+export { Resource, useResource } from './useResource';
