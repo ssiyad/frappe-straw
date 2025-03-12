@@ -21,6 +21,7 @@ interface ListResource<T> extends Resource<T[]> {
   nextPage: () => void;
   previousPage: () => void;
   currentPage: number;
+  getCount: () => Resource<number>;
 }
 
 interface ApiResponse<T> {
@@ -71,6 +72,23 @@ export function useListResource<T>({
     setCurrentStart((prev) => Math.max(prev - limit, 0));
   };
 
+  const getCount = () => {
+    const resource = useResource<{
+      message: number;
+    }>('frappe.desk.reportview.get_count', {
+      params: {
+        doctype,
+        filters,
+        limit: 9999999,
+      },
+    });
+
+    return {
+      ...resource,
+      data: resource.data?.message,
+    };
+  };
+
   return {
     data: result,
     loading,
@@ -81,5 +99,6 @@ export function useListResource<T>({
     nextPage,
     previousPage,
     currentPage,
+    getCount,
   };
 }
