@@ -1,0 +1,47 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Documentation
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.x
+          cache: npm
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use yarn v4
+        run: yarn set version berry
+      - name: Install dependencies
+        run: yarn install
+      - name: TSDoc Action
+        uses: erikyo/tsdoc-action@v1
+        with:
+          source_dir: ./*
+          output_dir: ./docs
+          front_page: readme.md
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
