@@ -27,9 +27,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use yarn v4
+        run: yarn set version berry
       - name: Install dependencies
         run: yarn install
       - name: Run tests
-        run: yarn test -- --coverage.enabled true
+        run: yarn test --coverage.enabled true
       - name: Report Coverage
         uses:  davelosert/vitest-coverage-report-action@v2
