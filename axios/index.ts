@@ -29,9 +29,15 @@ export const createAxios = (args: Args): AxiosInstance => {
     headers: headers(args),
     withCredentials: true,
     paramsSerializer: (params) => {
-      return qs.stringify(params, {
-        arrayFormat: 'repeat',
-      });
+      return qs.stringify(
+        Object.fromEntries(
+          Object.entries(params).map(([key, value]) => [
+            key,
+            Array.isArray(value) ? JSON.stringify(value) : value,
+          ]),
+        ),
+        { encode: false },
+      );
     },
   });
 
