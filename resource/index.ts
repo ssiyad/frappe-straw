@@ -65,7 +65,13 @@ export function useResource<T>(
   // Fetch data on mount.
   useEffect(() => {
     if (fetchOnMount) fetchData();
-  }, [url, params, body]);
+  }, [
+    JSON.stringify({
+      url,
+      params,
+      body,
+    }),
+  ]);
 
   return { data, loading, error, fetched, refresh: fetchData };
 }
