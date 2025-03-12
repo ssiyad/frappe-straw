@@ -11,7 +11,7 @@ const HEADER_SITE_NAME = 'X-Frappe-Site-Name';
 const HEADER_CSRF_TOKEN = 'X-Frappe-CSRF-Token';
 
 type Args = {
-  url: string;
+  url?: string;
   token?: () => string;
   tokenType?: 'Bearer' | 'token';
 };

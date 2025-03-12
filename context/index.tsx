@@ -31,7 +31,7 @@ export const Straw = ({
   tokenType,
   children,
 }: PropsWithChildren<{
-  url: string;
+  url?: string;
   token?: () => string;
   tokenType?: 'Bearer' | 'token';
 }>) => {
