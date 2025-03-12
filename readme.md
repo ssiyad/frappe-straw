@@ -13,42 +13,19 @@ intended. If you face any issues, report them
 contribute, please raise a [pull
 request](https://github.com/ssiyad/frappe-straw/pulls).
 
-## Examples
-#### A basic user type
+## Example
 ```
-type User = {
-  ...BaseDocument;
-  name: string;
-  age: number;
-  org: string;
-}
-```
+import { useDocumentResource } from 'frappe-straw';
+import { BaseDocument } from 'frappe-straw/types';
 
-#### Document Resource
+const { data, error, loading, refresh } = useDocumentResource<BaseDocument>(
+  'Role',
+  'Guest',
+  {
+    fetchOnMount: false,
+  },
+);
 ```
-const user = createDocumentResource<User>({
-  doctype: 'User',
-  docname: 'hello@example.com',
-})
-```
-
-#### List Resource
-```
-const users = createListResource<User>({
-  doctype: 'User',
-  fields: ['name', 'age', 'org'],
-  filters: {
-    org: 'Example Org.',
-    age: {
-      operator: '>',
-      value: 25,
-    }
-  }
-})
-```
-
-## Architecture
-[Documentation](architecture.md)
 
 ## Inspirations
 - [Frappe JS SDK](https://github.com/The-Commit-Company/frappe-js-sdk)
