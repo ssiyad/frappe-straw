@@ -14,7 +14,7 @@ contribute, please raise a [pull
 request](https://github.com/ssiyad/frappe-straw/pulls).
 
 ## Example
-```
+```typescript
 import { useDocumentResource } from 'frappe-straw';
 import { BaseDocument } from 'frappe-straw/types';
 
