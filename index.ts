@@ -3,4 +3,4 @@ export { useCurrentUser, useLogin, useLogout } from './auth';
 export { Straw } from './context';
 export { useDocumentResource } from './document-resource';
 export { useListResource } from './list-resource';
-export { useResource } from './resource';
+export { StrawResource, useResource } from './resource';
