@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useApi } from '../api';
 import { useResource } from '../resource';
 import { BaseDocument } from '../types';
+import { useMethod } from './useMethod';
 
 interface UseDocumentResourceOptions {
   fetchOnMount?: boolean;
@@ -16,6 +17,7 @@ interface DocumentResource<T extends BaseDocument> {
   save: () => Promise<void>;
   submit: () => Promise<void>;
   cancel: () => Promise<void>;
+  useMethod: <T>(method: string) => ReturnType<typeof useMethod<T>>;
 }
 
 const DOCUMENT_ACTION_URL = 'frappe.desk.form.save.savedocs';
@@ -74,5 +76,6 @@ export function useDocumentResource<T extends BaseDocument>(
     save: () => performAction('Save'),
     submit: () => performAction('Submit'),
     cancel: () => performAction('Cancel'),
+    useMethod: <T>(method: string) => useMethod<T>(method, doctype, docname),
   };
 }
