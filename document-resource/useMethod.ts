@@ -1,3 +1,4 @@
+import React from 'react';
 import { useResource } from '../resource';
 
 /**
@@ -5,30 +6,41 @@ import { useResource } from '../resource';
  * @param method - Method name.
  * @param doctype - Document type.
  * @param docname - Document name.
- * @returns `Resource` object.
  */
 export const useMethod = <T>(
   method: string,
   doctype: string,
   docname: string,
+  setParentData: React.Dispatch<React.SetStateAction<{ data: T } | undefined>>,
 ) => {
-  const resource = useResource<T>('run_doc_method', {
+  const resource = useResource<{
+    docs: T[];
+  }>('run_doc_method', {
     fetchOnMount: false,
   });
 
-  const run = (params?: Record<string, any>) => {
-    resource.refresh({
-      params: {
-        method,
-        dt: doctype,
-        dn: docname,
-        args: JSON.stringify(params),
-      },
-    });
+  const run = async (params?: Record<string, any>) => {
+    try {
+      const r = await resource.refresh({
+        params: {
+          method,
+          dt: doctype,
+          dn: docname,
+          args: JSON.stringify(params),
+        },
+      });
+      const parentDoc = r?.docs[0];
+      if (parentDoc) {
+        setParentData({
+          data: parentDoc,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {
-    ...resource,
     run,
   };
 };

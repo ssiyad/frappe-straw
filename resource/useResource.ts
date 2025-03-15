@@ -16,7 +16,12 @@ export interface Resource<T> {
   loading: boolean;
   error: Error | null;
   fetched: boolean;
-  refresh: ({ params }?: { params?: Record<string, any> }) => void;
+  refresh: ({
+    params,
+  }?: {
+    params?: Record<string, any>;
+  }) => Promise<T | undefined>;
+  setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 }
 
 export function useResource<T>(
@@ -57,6 +62,7 @@ export function useResource<T>(
         });
         setData(response);
         setFetched(true);
+        return response;
       } catch (err) {
         setData(undefined);
         setError(err instanceof Error ? err : new Error('Unknown error'));
@@ -78,5 +84,12 @@ export function useResource<T>(
     }),
   ]);
 
-  return { data, loading, error, fetched, refresh: fetchData };
+  return {
+    data,
+    loading,
+    error,
+    fetched,
+    refresh: fetchData,
+    setData,
+  };
 }

@@ -38,16 +38,13 @@ export function useDocumentResource<T extends BaseDocument>(
     [doctype, docname],
   );
 
-  const { data, loading, error, fetched, refresh } = useResource<{ data: T }>(
-    url,
-    {
-      fetchOnMount,
-    },
-  );
+  const resource = useResource<{ data: T }>(url, {
+    fetchOnMount,
+  });
   const apiRequest = useApi();
 
   // Extract actual document from API response
-  const result = data?.data;
+  const result = resource.data?.data;
 
   const performAction = useCallback(
     async (action: 'Save' | 'Submit' | 'Cancel') => {
@@ -62,20 +59,19 @@ export function useDocumentResource<T extends BaseDocument>(
         },
       });
 
-      refresh();
+      resource.refresh();
     },
-    [apiRequest, result, refresh],
+    [apiRequest, result, resource.refresh],
   );
 
   return {
+    ...resource,
     data: result,
-    loading,
-    error,
-    fetched,
-    refresh,
     save: () => performAction('Save'),
     submit: () => performAction('Submit'),
     cancel: () => performAction('Cancel'),
-    useMethod: <T>(method: string) => useMethod<T>(method, doctype, docname),
+    useMethod: (method: string) => {
+      return useMethod(method, doctype, docname, resource.setData);
+    },
   };
 }
