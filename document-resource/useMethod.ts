@@ -13,16 +13,22 @@ export const useMethod = <T>(
   docname: string,
 ) => {
   const resource = useResource<T>('run_doc_method', {
-    params: {
-      method,
-      dt: doctype,
-      dn: docname,
-    },
     fetchOnMount: false,
   });
 
+  const run = (params?: Record<string, any>) => {
+    resource.refresh({
+      params: {
+        method,
+        dt: doctype,
+        dn: docname,
+        args: JSON.stringify(params),
+      },
+    });
+  };
+
   return {
     ...resource,
-    run: resource.refresh,
+    run,
   };
 };

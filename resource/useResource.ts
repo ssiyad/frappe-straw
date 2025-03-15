@@ -16,7 +16,7 @@ export interface Resource<T> {
   loading: boolean;
   error: Error | null;
   fetched: boolean;
-  refresh: () => void;
+  refresh: ({ params }?: { params?: Record<string, any> }) => void;
 }
 
 export function useResource<T>(
@@ -40,27 +40,32 @@ export function useResource<T>(
   const validUrl =
     url.startsWith('http') || url.startsWith('/') ? url : `/api/method/${url}`;
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const fetchData = useCallback(
+    async ({
+      params: paramsRequest,
+    }: { params?: Record<string, any> } = {}) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await apiRequest({
-        url: validUrl,
-        method,
-        params,
-        body,
-        cache,
-      });
-      setData(response);
-      setFetched(true);
-    } catch (err) {
-      setData(undefined);
-      setError(err instanceof Error ? err : new Error('Unknown error'));
-    } finally {
-      setLoading(false);
-    }
-  }, [apiRequest, url, method, body, params, cache]);
+      try {
+        const response = await apiRequest({
+          url: validUrl,
+          method,
+          params: paramsRequest || params,
+          body,
+          cache,
+        });
+        setData(response);
+        setFetched(true);
+      } catch (err) {
+        setData(undefined);
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiRequest, url, method, body, params, cache],
+  );
 
   // Fetch data on mount.
   useEffect(() => {
