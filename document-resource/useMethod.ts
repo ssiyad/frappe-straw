@@ -16,6 +16,7 @@ export const useMethod = <T>(
   const resource = useResource<{
     docs: T[];
   }>('run_doc_method', {
+    method: 'post',
     fetchOnMount: false,
   });
 
