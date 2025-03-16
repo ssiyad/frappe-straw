@@ -16,7 +16,7 @@ interface ApiRequest extends FetchOptions {
  * Hook to make an API request with caching.
  */
 export const useApi = <T = unknown>() => {
-  const { client, cache: cacheStore } = useContext(StrawContext);
+  const { client, cache: cacheStore, onError } = useContext(StrawContext);
 
   return useCallback(
     async ({
@@ -47,7 +47,9 @@ export const useApi = <T = unknown>() => {
 
         return response.data;
       } catch (error: any) {
-        throw toStrawError(error);
+        const err = toStrawError(error);
+        onError?.(err);
+        throw err;
       }
     },
     [client, cacheStore],
