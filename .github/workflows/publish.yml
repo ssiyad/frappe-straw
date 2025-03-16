@@ -3,10 +3,10 @@ name: Publish Package to npmjs
 on:
   release:
     types:
-      - published
+      - released
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
