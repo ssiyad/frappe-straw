@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
-import type { HttpMethod, JsonCompatible, Params } from '../types';
+import type { FetchOptions, HttpMethod, JsonCompatible } from '../types';
 
-interface UseResourceOptions<T> {
+interface UseResourceOptions<T> extends FetchOptions {
   method?: HttpMethod;
-  body?: Record<string, any>;
-  params?: Params;
   placeholder?: T;
   cache?: JsonCompatible;
   fetchOnMount?: boolean;
@@ -16,7 +14,7 @@ export interface Resource<T> {
   loading: boolean;
   error: Error | null;
   fetched: boolean;
-  refresh: ({ params }?: { params?: Params }) => Promise<T | undefined>;
+  refresh: (options?: FetchOptions) => Promise<T | undefined>;
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 }
 
@@ -42,7 +40,7 @@ export function useResource<T>(
     url.startsWith('http') || url.startsWith('/') ? url : `/api/method/${url}`;
 
   const fetchData = useCallback(
-    async ({ params: paramsRequest }: { params?: Params } = {}) => {
+    async (options: FetchOptions = {}) => {
       setLoading(true);
       setError(null);
 
@@ -50,8 +48,8 @@ export function useResource<T>(
         const response = await apiRequest({
           url: validUrl,
           method,
-          params: paramsRequest || params,
-          body,
+          params: options.params || params,
+          body: options.body || body,
           cache,
         });
         setData(response);
