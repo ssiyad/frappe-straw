@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
-import type { FetchOptions, JsonCompatible } from '../types';
+import type { FetchOptions, JsonCompatible, StrawError } from '../types';
 
 interface UseResourceOptions<T> extends FetchOptions {
   placeholder?: T;
@@ -31,7 +31,7 @@ export function useResource<T>(
   const apiRequest = useApi<T>();
   const [data, setData] = useState<T | undefined>(placeholder);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<StrawError | null>(null);
   const [fetched, setFetched] = useState(false);
 
   // Ensure URL is valid.
@@ -54,9 +54,9 @@ export function useResource<T>(
         setData(response);
         setFetched(true);
         return response;
-      } catch (err) {
+      } catch (err: any) {
         setData(undefined);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
+        setError(err);
       } finally {
         setLoading(false);
       }
