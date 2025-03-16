@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useResource } from '../resource';
-import type { ListFilter } from '../types';
+import type { ListFilter, StrawError } from '../types';
 import { tranformFilter } from './filters';
 import { useCount } from './useCount';
 
@@ -20,7 +20,7 @@ interface UseListResourceOptions<T> {
 interface ListResource<T> {
   data: T[];
   loading: boolean;
-  error: Error | null;
+  error: StrawError | null;
   fetched: boolean;
   refresh: () => void;
   nextPage: () => void;

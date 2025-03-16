@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useApi } from '../api';
 import { useResource } from '../resource';
-import type { BaseDocument } from '../types';
+import type { BaseDocument, StrawError } from '../types';
 import { useMethod } from './useMethod';
 
 interface UseDocumentResourceOptions {
@@ -11,7 +11,7 @@ interface UseDocumentResourceOptions {
 interface DocumentResource<T extends BaseDocument> {
   data: T | undefined;
   loading: boolean;
-  error: Error | null;
+  error: StrawError | null;
   fetched: boolean;
   refresh: () => void;
   save: () => Promise<void>;

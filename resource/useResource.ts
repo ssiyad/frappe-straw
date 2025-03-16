@@ -11,7 +11,7 @@ interface UseResourceOptions<T> extends FetchOptions {
 export interface Resource<T> {
   data: T | undefined;
   loading: boolean;
-  error: Error | null;
+  error: StrawError | null;
   fetched: boolean;
   refresh: (options?: FetchOptions) => Promise<T | undefined>;
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
