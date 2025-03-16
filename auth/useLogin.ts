@@ -1,7 +1,7 @@
 import { useResource } from '../resource';
+import { ResponseMessage } from '../types';
 
-type R = {
-  message: 'Logged In';
+type R = ResponseMessage & {
   home_page: string;
   full_name: string;
 };

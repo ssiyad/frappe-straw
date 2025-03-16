@@ -1,10 +1,10 @@
 import { useResource } from '../resource';
-import { ListFilter } from '../types';
+import { ListFilter, ResponseMessage } from '../types';
+
+const apiMethod = 'frappe.desk.reportview.get_count';
 
 export const useCount = <T>(doctype: string, filters?: ListFilter<T>) => {
-  const resource = useResource<{
-    message: number;
-  }>('frappe.desk.reportview.get_count', {
+  const resource = useResource<ResponseMessage<number>>(apiMethod, {
     params: {
       doctype,
       filters,

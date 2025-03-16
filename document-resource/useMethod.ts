@@ -1,5 +1,12 @@
 import React from 'react';
 import { useResource } from '../resource';
+import { ResponseMessage } from '../types';
+
+type R<T, U> = ResponseMessage<T> & {
+  docs: U[];
+};
+
+const apiMethod = 'run_doc_method';
 
 /**
  * Run a method on a document.
@@ -13,10 +20,7 @@ export const useMethod = <T, U>(
   docname: string,
   setParentData: React.Dispatch<React.SetStateAction<{ data: U } | undefined>>,
 ) => {
-  const resource = useResource<{
-    message: T;
-    docs: U[];
-  }>('run_doc_method', {
+  const resource = useResource<R<T, U>>(apiMethod, {
     method: 'post',
     fetchOnMount: false,
   });

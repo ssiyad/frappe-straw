@@ -1,8 +1,5 @@
 import { useResource } from '../resource';
-
-type R = {
-  message: string;
-};
+import { ResponseMessage } from '../types';
 
 const apiMethod = 'frappe.auth.get_logged_user';
 
@@ -11,7 +8,7 @@ const apiMethod = 'frappe.auth.get_logged_user';
  * @returns Logged in user's id
  */
 export const useCurrentUser = () => {
-  const resource = useResource<R>(apiMethod);
+  const resource = useResource<ResponseMessage>(apiMethod);
 
   return {
     ...resource,
