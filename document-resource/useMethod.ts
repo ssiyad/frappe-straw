@@ -7,14 +7,15 @@ import { useResource } from '../resource';
  * @param doctype - Document type.
  * @param docname - Document name.
  */
-export const useMethod = <T>(
+export const useMethod = <T, U>(
   method: string,
   doctype: string,
   docname: string,
-  setParentData: React.Dispatch<React.SetStateAction<{ data: T } | undefined>>,
+  setParentData: React.Dispatch<React.SetStateAction<{ data: U } | undefined>>,
 ) => {
   const resource = useResource<{
-    docs: T[];
+    message: T;
+    docs: U[];
   }>('run_doc_method', {
     method: 'post',
     fetchOnMount: false,
@@ -36,12 +37,15 @@ export const useMethod = <T>(
           data: parentDoc,
         });
       }
+      return r?.message;
     } catch (error) {
       console.error(error);
     }
   };
 
   return {
+    ...resource,
+    data: resource.data?.message,
     run,
   };
 };

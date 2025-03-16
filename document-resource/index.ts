@@ -17,7 +17,7 @@ interface DocumentResource<T extends BaseDocument> {
   save: () => Promise<void>;
   submit: () => Promise<void>;
   cancel: () => Promise<void>;
-  useMethod: <T>(method: string) => ReturnType<typeof useMethod<T>>;
+  useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
 }
 
 const DOCUMENT_ACTION_URL = 'frappe.desk.form.save.savedocs';
@@ -70,8 +70,8 @@ export function useDocumentResource<T extends BaseDocument>(
     save: () => performAction('Save'),
     submit: () => performAction('Submit'),
     cancel: () => performAction('Cancel'),
-    useMethod: (method: string) => {
-      return useMethod(method, doctype, docname, resource.setData);
+    useMethod: <U>(method: string) => {
+      return useMethod<U, T>(method, doctype, docname, resource.setData);
     },
   };
 }
