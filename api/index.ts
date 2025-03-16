@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
-import { HttpMethod, JsonCompatible } from '../types';
+import type { HttpMethod, JsonCompatible, Params } from '../types';
 import { getCacheKey } from './cache';
 
 /**
@@ -10,7 +10,7 @@ interface ApiRequest {
   url: string;
   method?: HttpMethod;
   body?: Record<string, any>;
-  params?: Record<string, any>;
+  params?: Params;
   cache?: JsonCompatible;
 }
 

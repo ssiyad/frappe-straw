@@ -1,10 +1,10 @@
-import { JsonCompatible } from '../types';
+import type { JsonCompatible, Params } from '../types';
 
 export const getCacheKey = (
   cache?: JsonCompatible,
   url?: string,
   method?: string,
-  params?: Record<string, any>,
+  params?: Params,
   body?: Record<string, any>,
 ) => {
   // If `cache` is `true`, it probably means the user wants to cache the entire

@@ -6,4 +6,5 @@ export type {
   ListFilterOperator,
   ListFilterValueExtended,
 } from './ListFilter';
+export type { Params } from './Params';
 export type { ResponseMessage } from './ResponseMessage';

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useResource } from '../resource';
-import { ListFilter } from '../types';
+import type { ListFilter } from '../types';
 import { tranformFilter } from './filters';
 import { useCount } from './useCount';
 

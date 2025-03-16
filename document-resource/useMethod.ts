@@ -1,6 +1,6 @@
 import React from 'react';
 import { useResource } from '../resource';
-import { ResponseMessage } from '../types';
+import type { Params, ResponseMessage } from '../types';
 
 type R<T, U> = ResponseMessage<T> & {
   docs: U[];
@@ -25,7 +25,7 @@ export const useMethod = <T, U>(
     fetchOnMount: false,
   });
 
-  const run = async (params?: Record<string, any>) => {
+  const run = async (params?: Params) => {
     try {
       const r = await resource.refresh({
         params: {

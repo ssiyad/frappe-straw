@@ -1,6 +1,6 @@
 import React from 'react';
 import { Resource, useResource } from '.';
-import { JsonCompatible } from '../types';
+import type { JsonCompatible } from '../types';
 
 export const StrawResource = <T = JsonCompatible,>({
   url,

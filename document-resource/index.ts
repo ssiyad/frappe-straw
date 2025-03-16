@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useApi } from '../api';
 import { useResource } from '../resource';
-import { BaseDocument } from '../types';
+import type { BaseDocument } from '../types';
 import { useMethod } from './useMethod';
 
 interface UseDocumentResourceOptions {

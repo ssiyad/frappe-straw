@@ -1,5 +1,5 @@
 import { useResource } from '../resource';
-import { ResponseMessage } from '../types';
+import type { ResponseMessage } from '../types';
 
 const apiMethod = 'frappe.auth.get_logged_user';
 

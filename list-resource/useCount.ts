@@ -1,5 +1,5 @@
 import { useResource } from '../resource';
-import { ListFilter, ResponseMessage } from '../types';
+import type { ListFilter, ResponseMessage } from '../types';
 
 const apiMethod = 'frappe.desk.reportview.get_count';
 

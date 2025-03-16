@@ -1,5 +1,5 @@
 import { useResource } from '../resource';
-import { ResponseMessage } from '../types';
+import type { ResponseMessage } from '../types';
 
 type R = ResponseMessage & {
   home_page: string;
