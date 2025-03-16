@@ -15,24 +15,29 @@ const apiMethod = 'login';
  * @param password - Password to login with.
  * @returns `Resource` object.
  */
-export const useLogin = ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
+export const useLogin = () => {
   const resource = useResource<R>(apiMethod, {
     method,
     fetchOnMount: false,
-    body: {
-      usr: username,
-      pwd: password,
-    },
   });
+
+  const login = ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    return resource.refresh({
+      body: {
+        usr: username,
+        pwd: password,
+      },
+    });
+  };
 
   return {
     ...resource,
-    login: resource.refresh,
+    login,
   };
 };
