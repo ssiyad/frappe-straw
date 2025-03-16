@@ -1,8 +1,8 @@
-export { type BaseDocument } from './base-document';
-export { type HttpMethod } from './http-method';
-export { type JsonCompatible } from './json';
+export { type BaseDocument } from './BaseDocument';
+export { type HttpMethod } from './HttpMethod';
+export { type JsonCompatible } from './JsonCompatible';
 export {
   type ListFilter,
   type ListFilterOperator,
   type ListFilterValueExtended,
-} from './list-filter';
+} from './ListFilter';
