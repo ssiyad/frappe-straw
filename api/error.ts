@@ -8,7 +8,7 @@ export const toStrawError = ({
 }: AxiosError): StrawError => {
   // Frappe server messages are stored in the _server_messages key.
   // Check `ServerMessage` type for more details.
-  const serverMessagesStr = response.data._server_messages || '[]';
+  const serverMessagesStr = (response?.data as any)._server_messages || '[]';
 
   const err: ServerMessage = JSON.parse(
     JSON.parse(serverMessagesStr).at(0) ?? null,
