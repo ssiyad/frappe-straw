@@ -10,3 +10,5 @@ export type {
 } from './ListFilter';
 export type { Params } from './Params';
 export type { ResponseMessage } from './ResponseMessage';
+export type { ServerMessage } from './ServerMessage';
+export type { StrawError } from './StrawError';

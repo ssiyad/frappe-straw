@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
+import { toStrawError } from './error';
 
 /**
  * API request parameters.
@@ -45,8 +46,8 @@ export const useApi = <T = unknown>() => {
         if (cacheKey) cacheStore.set(cacheKey, response.data);
 
         return response.data;
-      } catch (error) {
-        throw error instanceof Error ? error : new Error(String(error));
+      } catch (error: any) {
+        throw toStrawError(error);
       }
     },
     [client, cacheStore],
