@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Resource, useResource } from '../resource';
+import { useResource } from '../resource';
 import { ListFilter } from '../types';
 import { tranformFilter } from './filters';
+import { useCount } from './useCount';
 
 interface UseListResourceOptions<T> {
   doctype: string;
@@ -16,17 +17,16 @@ interface UseListResourceOptions<T> {
   limit?: number;
 }
 
-interface ListResource<T> extends Resource<T[]> {
-  count: number;
+interface ListResource<T> {
+  data: T[];
+  loading: boolean;
+  error: Error | null;
+  fetched: boolean;
+  refresh: () => void;
   nextPage: () => void;
   previousPage: () => void;
   currentPage: number;
-  useCount: () => Resource<number>;
-}
-
-interface ApiResponse<T> {
-  data: T[];
-  count: number;
+  useCount: () => ReturnType<typeof useCount>;
 }
 
 /**
@@ -56,49 +56,26 @@ export function useListResource<T>({
     [fields, filters, group, sort, limit, currentStart],
   );
 
-  const { data, loading, error, fetched, refresh } = useResource<
-    ApiResponse<T>
-  >(url, { params });
-
-  const result = data?.data ?? [];
-  const count = data?.count ?? 0;
+  const resource = useResource<{
+    data: T[];
+  }>(url, { params });
+  const result = resource.data?.data ?? [];
   const currentPage = Math.floor(currentStart / limit) + 1;
 
   const nextPage = () => {
-    setCurrentStart((prev) => Math.min(prev + limit, count - limit));
+    setCurrentStart((prev) => prev + limit);
   };
 
   const previousPage = () => {
     setCurrentStart((prev) => Math.max(prev - limit, 0));
   };
 
-  const useCount = () => {
-    const resource = useResource<{
-      message: number;
-    }>('frappe.desk.reportview.get_count', {
-      params: {
-        doctype,
-        filters,
-        limit: 9999999,
-      },
-    });
-
-    return {
-      ...resource,
-      data: resource.data?.message,
-    };
-  };
-
   return {
+    ...resource,
     data: result,
-    loading,
-    error,
-    fetched,
-    refresh,
-    count,
     nextPage,
     previousPage,
     currentPage,
-    useCount,
+    useCount: () => useCount(doctype, filters),
   };
 }
