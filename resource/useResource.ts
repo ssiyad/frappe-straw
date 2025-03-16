@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
-import type { FetchOptions, HttpMethod, JsonCompatible } from '../types';
+import type { FetchOptions, JsonCompatible } from '../types';
 
 interface UseResourceOptions<T> extends FetchOptions {
-  method?: HttpMethod;
   placeholder?: T;
   cache?: JsonCompatible;
   fetchOnMount?: boolean;

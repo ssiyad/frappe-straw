@@ -1,16 +1,13 @@
 import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
-import type { Body, HttpMethod, JsonCompatible, Params } from '../types';
+import type { FetchOptions, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 
 /**
  * API request parameters.
  */
-interface ApiRequest {
+interface ApiRequest extends FetchOptions {
   url: string;
-  method?: HttpMethod;
-  body?: Body;
-  params?: Params;
   cache?: JsonCompatible;
 }
 
