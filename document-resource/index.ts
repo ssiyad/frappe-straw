@@ -3,6 +3,7 @@ import { useResource } from '../resource';
 import type { BaseDocument, StrawError } from '../types';
 import { useAction } from './useAction';
 import { useMethod } from './useMethod';
+import { useTimeAgo } from './useTimeAgo';
 
 interface UseDocumentResourceOptions {
   fetchOnMount?: boolean;
@@ -14,6 +15,7 @@ interface DocumentResource<T extends BaseDocument> {
   error: StrawError | null;
   fetched: boolean;
   refresh: () => void;
+  useTimeAgo: () => ReturnType<typeof useTimeAgo<T>>;
   useSave: () => ReturnType<typeof useAction<T>>;
   useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
 }
@@ -44,6 +46,7 @@ export function useDocumentResource<T extends BaseDocument>(
   return {
     ...resource,
     data: result,
+    useTimeAgo: () => useTimeAgo(result),
     useSave: () => useAction('Save', result, resource.setData),
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, resource.setData);
