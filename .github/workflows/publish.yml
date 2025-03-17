@@ -17,11 +17,7 @@ jobs:
         with:
           node-version: '23.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Use yarn v4
-        run: yarn set version berry
-      - run: yarn
-      - run: yarn npm publish --access public
+      - run: npm install
+      - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
