@@ -10,6 +10,7 @@ on:
 
 jobs:
   test:
+    name: Run Tests
     permissions:
       contents: read
       pull-requests: write
@@ -32,7 +33,7 @@ jobs:
       - name: Use yarn v4
         run: yarn set version berry
       - name: Install dependencies
-        run: yarn install
+        run: yarn
       - name: Run tests
         run: yarn test --coverage.enabled true
       - name: Report Coverage

@@ -2,11 +2,11 @@ name: Publish Package to npmjs
 
 on:
   release:
-    types:
-      - released
+    types: [published]
 
 jobs:
   publish:
+    name: Publish Package to NPM
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,7 +17,11 @@ jobs:
         with:
           node-version: '23.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm publish
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use yarn v4
+        run: yarn set version berry
+      - run: yarn
+      - run: yarn npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ NPM_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
