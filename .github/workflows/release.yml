@@ -12,5 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Create changelog text
+        uses: loopwerk/tag-changelog@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exclude_types: other,doc,chore,ci
       - name: Release
         uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.TOKEN }}
