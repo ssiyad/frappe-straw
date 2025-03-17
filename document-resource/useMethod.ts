@@ -1,6 +1,6 @@
 import React from 'react';
 import { useResource } from '../resource';
-import type { Params, ResponseMessage } from '../types';
+import type { BaseDocument, Params, ResponseMessage } from '../types';
 
 type R<T, U> = ResponseMessage<T> & {
   docs: U[];
@@ -14,7 +14,7 @@ const apiMethod = 'run_doc_method';
  * @param doctype - Document type.
  * @param docname - Document name.
  */
-export const useMethod = <T, U>(
+export const useMethod = <T, U extends BaseDocument>(
   method: string,
   doctype: string,
   docname: string,

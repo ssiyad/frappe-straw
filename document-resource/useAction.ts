@@ -1,5 +1,6 @@
 import React from 'react';
 import { useResource } from '../resource';
+import { type BaseDocument } from '../types';
 
 type R<T> = {
   docs: T[];
@@ -14,7 +15,7 @@ const actionMethod = 'frappe.desk.form.save.savedocs';
  * @param setParentData - Set parent data.
  * @returns `useResource` object.
  */
-export const useAction = <T>(
+export const useAction = <T extends BaseDocument>(
   action: 'Save' | 'Submit' | 'Cancel',
   doc?: T,
   setParentData?: React.Dispatch<React.SetStateAction<{ data: T } | undefined>>,
