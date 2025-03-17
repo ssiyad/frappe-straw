@@ -3,6 +3,7 @@ import { useResource } from '../resource';
 import type { BaseDocument, StrawError } from '../types';
 import { useAction } from './useAction';
 import { useMethod } from './useMethod';
+import { useStatus } from './useStatus';
 import { useTimeAgo } from './useTimeAgo';
 
 interface UseDocumentResourceOptions {
@@ -15,6 +16,7 @@ interface DocumentResource<T extends BaseDocument> {
   error: StrawError | null;
   fetched: boolean;
   refresh: () => void;
+  useStatus: () => ReturnType<typeof useStatus<T>>;
   useTimeAgo: () => ReturnType<typeof useTimeAgo<T>>;
   useSave: () => ReturnType<typeof useAction<T>>;
   useSubmit: () => ReturnType<typeof useAction<T>>;
@@ -48,6 +50,7 @@ export function useDocumentResource<T extends BaseDocument>(
   return {
     ...resource,
     data: result,
+    useStatus: () => useStatus(result),
     useTimeAgo: () => useTimeAgo(result),
     useSave: () => useAction('Save', result, resource.setData),
     useSubmit: () => useAction('Submit', result, resource.setData),
