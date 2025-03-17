@@ -22,6 +22,6 @@ jobs:
       - name: Use yarn v4
         run: yarn set version berry
       - run: yarn
-      - run: yarn npm publish
+      - run: yarn npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
