@@ -1,8 +1,15 @@
 <div align='center'>
   <h1>Frappe Straw</h1>
-  <strong>A minimal, pleasant and easy to use <a
-    href='https://frappe.io/framework' target='_blank'>Frappe</a></strong>
-  client.
+  <div>
+    <img src='https://img.shields.io/github/actions/workflow/status/ssiyad/frappe-straw/tests.yml' />
+    <img src='https://img.shields.io/npm/dw/frappe-straw' />
+    <img src='https://img.shields.io/npm/v/frappe-straw' />
+  </div>
+  <strong>
+    Minimal, pleasant and easy to use
+    <a href='https://frappe.io/framework' target='_blank'>Frappe</a>
+    client.
+  </strong>
   <div>Made with ❤️ at <a href='https://bytsolv.com/' target='_blank'>BytSolv</a>.</div>
 </div>
 
