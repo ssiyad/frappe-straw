@@ -20,10 +20,15 @@ intended. If you face any issues, report them
 contribute, please raise a [pull
 request](https://github.com/ssiyad/frappe-straw/pulls).
 
-## Example
+## Installation
+```shell
+npm install frappe-straw
+```
+
+Examaple
 ```typescript
 import { useDocumentResource } from 'frappe-straw';
-import { BaseDocument } from 'frappe-straw/types';
+import { type BaseDocument } from 'frappe-straw/types';
 
 const { data, error, loading, refresh } = useDocumentResource<BaseDocument>(
   'Role',
