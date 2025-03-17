@@ -17,6 +17,8 @@ interface DocumentResource<T extends BaseDocument> {
   refresh: () => void;
   useTimeAgo: () => ReturnType<typeof useTimeAgo<T>>;
   useSave: () => ReturnType<typeof useAction<T>>;
+  useSubmit: () => ReturnType<typeof useAction<T>>;
+  useCancel: () => ReturnType<typeof useAction<T>>;
   useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
 }
 
@@ -48,6 +50,8 @@ export function useDocumentResource<T extends BaseDocument>(
     data: result,
     useTimeAgo: () => useTimeAgo(result),
     useSave: () => useAction('Save', result, resource.setData),
+    useSubmit: () => useAction('Submit', result, resource.setData),
+    useCancel: () => useAction('Cancel', result, resource.setData),
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, resource.setData);
     },
