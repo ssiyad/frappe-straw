@@ -12,6 +12,9 @@ interface UseDocumentResourceOptions {
 
 interface DocumentResource<T extends BaseDocument> {
   data: T | undefined;
+  canSave: boolean;
+  canSubmit: boolean;
+  canCancel: boolean;
   loading: boolean;
   error: StrawError | null;
   fetched: boolean;
@@ -47,9 +50,16 @@ export function useDocumentResource<T extends BaseDocument>(
   // Extract actual document from API response
   const result = resource.data?.data;
 
+  const canSave = useMemo(() => result?.docstatus === 0, [result?.docstatus]);
+  const canSubmit = useMemo(() => result?.docstatus === 0, [result?.docstatus]);
+  const canCancel = useMemo(() => result?.docstatus === 1, [result?.docstatus]);
+
   return {
     ...resource,
     data: result,
+    canSave,
+    canSubmit,
+    canCancel,
     useStatus: () => useStatus(result),
     useTimeAgo: () => useTimeAgo(result),
     useSave: () => useAction('Save', result, resource.setData),
