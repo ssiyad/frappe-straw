@@ -35,12 +35,14 @@ export const useMethod = <T, U>(
           args: JSON.stringify(params),
         },
       });
+
       const parentDoc = r?.docs[0];
       if (parentDoc) {
         setParentData({
           data: parentDoc,
         });
       }
+
       return r?.message;
     } catch (error) {
       console.error(error);

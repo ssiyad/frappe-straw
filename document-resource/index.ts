@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react';
-import { useApi } from '../api';
+import { useMemo } from 'react';
 import { useResource } from '../resource';
 import type { BaseDocument, StrawError } from '../types';
+import { useAction } from './useAction';
 import { useMethod } from './useMethod';
 
 interface UseDocumentResourceOptions {
@@ -14,13 +14,9 @@ interface DocumentResource<T extends BaseDocument> {
   error: StrawError | null;
   fetched: boolean;
   refresh: () => void;
-  save: () => Promise<void>;
-  submit: () => Promise<void>;
-  cancel: () => Promise<void>;
+  useSave: () => ReturnType<typeof useAction<T>>;
   useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
 }
-
-const DOCUMENT_ACTION_URL = 'frappe.desk.form.save.savedocs';
 
 /**
  * Hook for managing a document resource.
@@ -41,35 +37,14 @@ export function useDocumentResource<T extends BaseDocument>(
   const resource = useResource<{ data: T }>(url, {
     fetchOnMount,
   });
-  const apiRequest = useApi();
 
   // Extract actual document from API response
   const result = resource.data?.data;
 
-  const performAction = useCallback(
-    async (action: 'Save' | 'Submit' | 'Cancel') => {
-      if (!result) throw new Error('No document data available');
-
-      await apiRequest({
-        url: DOCUMENT_ACTION_URL,
-        method: 'post',
-        body: {
-          doc: JSON.stringify(result),
-          action,
-        },
-      });
-
-      resource.refresh();
-    },
-    [apiRequest, result, resource.refresh],
-  );
-
   return {
     ...resource,
     data: result,
-    save: () => performAction('Save'),
-    submit: () => performAction('Submit'),
-    cancel: () => performAction('Cancel'),
+    useSave: () => useAction('Save', result, resource.setData),
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, resource.setData);
     },
