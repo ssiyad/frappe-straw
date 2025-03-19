@@ -6,6 +6,8 @@ interface UseResourceOptions<T> extends FetchOptions {
   placeholder?: T;
   cache?: JsonCompatible;
   fetchOnMount?: boolean;
+  onSuccess?: (data: T) => void;
+  onError?: (error: StrawError) => void;
 }
 
 export interface Resource<T> {
@@ -26,6 +28,8 @@ export function useResource<T>(
     placeholder,
     cache,
     fetchOnMount = true,
+    onSuccess,
+    onError,
   }: UseResourceOptions<T> = {},
 ): Resource<T> {
   const apiRequest = useApi<T>();
@@ -53,10 +57,12 @@ export function useResource<T>(
         });
         setData(response);
         setFetched(true);
+        onSuccess?.(response);
         return response;
       } catch (err: any) {
         setData(undefined);
         setError(err);
+        onError?.(err);
       } finally {
         setLoading(false);
       }
