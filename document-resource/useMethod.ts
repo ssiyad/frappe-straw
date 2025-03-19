@@ -45,7 +45,6 @@ export const useMethod = <T, U extends BaseDocument>(
         },
       });
 
-      // const parentDoc = r?.docs[0];
       if (parentDoc) {
         setParentData(parentDoc);
       }
