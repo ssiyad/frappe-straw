@@ -1,24 +1,19 @@
 import { useMemo } from 'react';
 import { useResource } from '../resource';
-import type { BaseDocument, StrawError } from '../types';
+import type { BaseDocument, FetchOptions } from '../types';
 import { useAction } from './useAction';
 import { useMethod } from './useMethod';
 import { useStatus } from './useStatus';
 import { useTimeAgo } from './useTimeAgo';
 
-interface UseDocumentResourceOptions {
+interface UseDocumentResourceOptions<T> extends FetchOptions<T> {
   fetchOnMount?: boolean;
 }
 
 interface DocumentResource<T extends BaseDocument> {
-  data: T | undefined;
   canSave: boolean;
   canSubmit: boolean;
   canCancel: boolean;
-  loading: boolean;
-  error: StrawError | null;
-  fetched: boolean;
-  refresh: () => void;
   useStatus: () => ReturnType<typeof useStatus<T>>;
   useTimeAgo: () => ReturnType<typeof useTimeAgo<T>>;
   useSave: () => ReturnType<typeof useAction<T>>;
@@ -36,37 +31,44 @@ interface DocumentResource<T extends BaseDocument> {
 export function useDocumentResource<T extends BaseDocument>(
   doctype: string,
   docname: string,
-  { fetchOnMount = true }: UseDocumentResourceOptions = {},
+  {
+    fetchOnMount = true,
+    onSuccess,
+    onError,
+  }: UseDocumentResourceOptions<T> = {},
 ): DocumentResource<T> {
   const url = useMemo(
     () => `/api/resource/${doctype}/${docname}`,
     [doctype, docname],
   );
 
-  const resource = useResource<{ data: T }>(url, {
+  const resource = useResource<{ data: T }, T>(url, {
     fetchOnMount,
+    transform: (data) => data.data,
+    onSuccess,
+    onError,
   });
 
-  // Extract actual document from API response
-  const result = resource.data?.data;
+  const data = resource.data;
+  const setData = resource.setData;
+  const docstatus = data?.docstatus;
 
-  const canSave = useMemo(() => result?.docstatus === 0, [result?.docstatus]);
-  const canSubmit = useMemo(() => result?.docstatus === 0, [result?.docstatus]);
-  const canCancel = useMemo(() => result?.docstatus === 1, [result?.docstatus]);
+  const canSave = useMemo(() => docstatus === 0, [docstatus]);
+  const canSubmit = useMemo(() => docstatus === 0, [docstatus]);
+  const canCancel = useMemo(() => docstatus === 1, [docstatus]);
 
   return {
     ...resource,
-    data: result,
     canSave,
     canSubmit,
     canCancel,
-    useStatus: () => useStatus(result),
-    useTimeAgo: () => useTimeAgo(result),
-    useSave: () => useAction('Save', result, resource.setData),
-    useSubmit: () => useAction('Submit', result, resource.setData),
-    useCancel: () => useAction('Cancel', result, resource.setData),
+    useStatus: () => useStatus(data),
+    useTimeAgo: () => useTimeAgo(data),
+    useSave: () => useAction('Save', data, setData),
+    useSubmit: () => useAction('Submit', data, setData),
+    useCancel: () => useAction('Cancel', data, setData),
     useMethod: <U>(method: string) => {
-      return useMethod<U, T>(method, doctype, docname, resource.setData);
+      return useMethod<U, T>(method, doctype, docname, setData);
     },
   };
 }

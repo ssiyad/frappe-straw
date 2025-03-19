@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useResource } from '../resource';
-import type { ListFilter, StrawError } from '../types';
+import type { FetchOptions, ListFilter } from '../types';
 import { tranformFilter } from './filters';
 import { useCount } from './useCount';
 
-interface UseListResourceOptions<T> {
+interface UseListResourceOptions<T> extends FetchOptions<T> {
   doctype: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
@@ -18,14 +18,9 @@ interface UseListResourceOptions<T> {
 }
 
 interface ListResource<T> {
-  data: T[];
-  loading: boolean;
-  error: StrawError | null;
-  fetched: boolean;
-  refresh: () => void;
+  currentPage: number;
   nextPage: () => void;
   previousPage: () => void;
-  currentPage: number;
   useCount: () => ReturnType<typeof useCount>;
 }
 
@@ -56,10 +51,13 @@ export function useListResource<T>({
     [fields, filters, group, sort, limit, currentStart],
   );
 
-  const resource = useResource<{
-    data: T[];
-  }>(url, { params });
-  const result = resource.data?.data ?? [];
+  const resource = useResource<
+    {
+      data: T[];
+    },
+    T[]
+  >(url, { params, transform: (data) => data.data });
+
   const currentPage = Math.floor(currentStart / limit) + 1;
 
   const nextPage = () => {
@@ -72,10 +70,9 @@ export function useListResource<T>({
 
   return {
     ...resource,
-    data: result,
     nextPage,
     previousPage,
     currentPage,
-    useCount: () => useCount(doctype, filters),
+    useCount: (options?: FetchOptions) => useCount(doctype, filters, options),
   };
 }

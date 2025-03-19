@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
-import type { FetchOptions, JsonCompatible, StrawError } from '../types';
+import type { FetchOptions, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 import { toStrawError } from './error';
 
@@ -10,7 +10,6 @@ import { toStrawError } from './error';
 interface ApiRequest extends FetchOptions {
   url: string;
   cache?: JsonCompatible;
-  onError?: (error: StrawError) => void;
 }
 
 /**

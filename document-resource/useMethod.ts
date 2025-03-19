@@ -1,6 +1,11 @@
 import React from 'react';
 import { useResource } from '../resource';
-import type { BaseDocument, Params, ResponseMessage } from '../types';
+import type {
+  BaseDocument,
+  FetchOptions,
+  Params,
+  ResponseMessage,
+} from '../types';
 
 type R<T, U> = ResponseMessage<T> & {
   docs: U[];
@@ -18,16 +23,20 @@ export const useMethod = <T, U extends BaseDocument>(
   method: string,
   doctype: string,
   docname: string,
-  setParentData: React.Dispatch<React.SetStateAction<{ data: U } | undefined>>,
+  setParentData: React.Dispatch<React.SetStateAction<U | undefined>>,
+  { onSuccess, onError }: FetchOptions<U> = {},
 ) => {
-  const resource = useResource<R<T, U>>(apiMethod, {
+  const resource = useResource<R<T, U>, U>(apiMethod, {
     method: 'post',
     fetchOnMount: false,
+    transform: (data) => data.docs[0],
+    onSuccess,
+    onError,
   });
 
   const run = async (params?: Params) => {
     try {
-      const r = await resource.refresh({
+      const parentDoc = await resource.refresh({
         params: {
           method,
           dt: doctype,
@@ -36,14 +45,12 @@ export const useMethod = <T, U extends BaseDocument>(
         },
       });
 
-      const parentDoc = r?.docs[0];
+      // const parentDoc = r?.docs[0];
       if (parentDoc) {
-        setParentData({
-          data: parentDoc,
-        });
+        setParentData(parentDoc);
       }
 
-      return r?.message;
+      return parentDoc;
     } catch (error) {
       console.error(error);
     }
@@ -51,7 +58,6 @@ export const useMethod = <T, U extends BaseDocument>(
 
   return {
     ...resource,
-    data: resource.data?.message,
     run,
   };
 };

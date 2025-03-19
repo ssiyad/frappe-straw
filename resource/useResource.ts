@@ -2,12 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
 import type { FetchOptions, JsonCompatible, StrawError } from '../types';
 
-interface UseResourceOptions<T> extends FetchOptions {
-  placeholder?: T;
+interface UseResourceOptions<T, U> extends FetchOptions<U> {
+  placeholder?: U;
   cache?: JsonCompatible;
   fetchOnMount?: boolean;
-  onSuccess?: (data: T) => void;
-  onError?: (error: StrawError) => void;
+  transform?: (data: T) => U;
 }
 
 export interface Resource<T> {
@@ -19,7 +18,7 @@ export interface Resource<T> {
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 }
 
-export function useResource<T>(
+export function useResource<T, U = T>(
   url: string,
   {
     method = 'get',
@@ -28,12 +27,13 @@ export function useResource<T>(
     placeholder,
     cache,
     fetchOnMount = true,
+    transform = (data) => data as unknown as U,
     onSuccess,
     onError,
-  }: UseResourceOptions<T> = {},
-): Resource<T> {
+  }: UseResourceOptions<T, U> = {},
+): Resource<U> {
   const apiRequest = useApi<T>();
-  const [data, setData] = useState<T | undefined>(placeholder);
+  const [data, setData] = useState<U | undefined>(placeholder);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<StrawError | null>(null);
   const [fetched, setFetched] = useState(false);
@@ -56,10 +56,11 @@ export function useResource<T>(
           cache,
           onError,
         });
-        setData(response);
+        const transformed = transform(response);
+        setData(transformed);
         setFetched(true);
-        onSuccess?.(response);
-        return response;
+        onSuccess?.(transformed);
+        return transformed;
       } catch (err: any) {
         setData(undefined);
         setError(err);

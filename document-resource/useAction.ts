@@ -1,6 +1,6 @@
 import React from 'react';
 import { useResource } from '../resource';
-import { type BaseDocument } from '../types';
+import type { BaseDocument, FetchOptions } from '../types';
 
 type R<T> = {
   docs: T[];
@@ -18,18 +18,22 @@ const actionMethod = 'frappe.desk.form.save.savedocs';
 export const useAction = <T extends BaseDocument>(
   action: 'Save' | 'Submit' | 'Cancel',
   doc?: T,
-  setParentData?: React.Dispatch<React.SetStateAction<{ data: T } | undefined>>,
+  setParentData?: React.Dispatch<React.SetStateAction<T | undefined>>,
+  { onSuccess, onError }: FetchOptions<T> = {},
 ) => {
-  const resource = useResource<R<T>>(actionMethod, {
+  const resource = useResource<R<T>, T>(actionMethod, {
     method: 'post',
     fetchOnMount: false,
+    transform: (data) => data.docs[0],
+    onSuccess,
+    onError,
   });
 
   const run = async (values?: Partial<T>) => {
     try {
       if (!doc) return;
 
-      const r = await resource.refresh({
+      const parentDoc = await resource.refresh({
         body: {
           doc: JSON.stringify({
             ...doc,
@@ -39,12 +43,11 @@ export const useAction = <T extends BaseDocument>(
         },
       });
 
-      const parentDoc = r?.docs[0];
       if (parentDoc && setParentData) {
-        setParentData({
-          data: parentDoc,
-        });
+        setParentData(parentDoc);
       }
+
+      return parentDoc;
     } catch (error) {
       console.error(error);
     }
