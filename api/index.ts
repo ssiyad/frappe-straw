@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
-import type { FetchOptions, JsonCompatible } from '../types';
+import type { FetchOptions, JsonCompatible, StrawError } from '../types';
 import { getCacheKey } from './cache';
 import { toStrawError } from './error';
 
@@ -10,13 +10,18 @@ import { toStrawError } from './error';
 interface ApiRequest extends FetchOptions {
   url: string;
   cache?: JsonCompatible;
+  onError?: (error: StrawError) => void;
 }
 
 /**
  * Hook to make an API request with caching.
  */
 export const useApi = <T = unknown>() => {
-  const { client, cache: cacheStore, onError } = useContext(StrawContext);
+  const {
+    client,
+    cache: cacheStore,
+    onError: onErrorGlobal,
+  } = useContext(StrawContext);
 
   return useCallback(
     async ({
@@ -25,6 +30,7 @@ export const useApi = <T = unknown>() => {
       params,
       body,
       cache,
+      onError = onErrorGlobal,
     }: ApiRequest): Promise<T> => {
       const cacheKey = cache
         ? getCacheKey(cache, url, method, params, body)

@@ -54,6 +54,7 @@ export function useResource<T>(
           params: options.params || params,
           body: options.body || body,
           cache,
+          onError,
         });
         setData(response);
         setFetched(true);
