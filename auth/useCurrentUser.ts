@@ -8,10 +8,7 @@ const apiMethod = 'frappe.auth.get_logged_user';
  * @returns Logged in user's id
  */
 export const useCurrentUser = () => {
-  const resource = useResource<ResponseMessage>(apiMethod);
-
-  return {
-    ...resource,
-    data: resource.data?.message,
-  };
+  return useResource<ResponseMessage, string>(apiMethod, {
+    transform: (data) => data.message,
+  });
 };
