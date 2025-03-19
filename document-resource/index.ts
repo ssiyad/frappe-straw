@@ -10,7 +10,8 @@ interface UseDocumentResourceOptions<T> extends FetchOptions<T> {
   fetchOnMount?: boolean;
 }
 
-interface DocumentResource<T extends BaseDocument> {
+interface DocumentResource<T extends BaseDocument>
+  extends ReturnType<typeof useResource<T>> {
   canSave: boolean;
   canSubmit: boolean;
   canCancel: boolean;
