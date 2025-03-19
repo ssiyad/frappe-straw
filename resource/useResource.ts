@@ -14,7 +14,7 @@ export interface Resource<T> {
   loading: boolean;
   error: StrawError | null;
   fetched: boolean;
-  refresh: (options?: FetchOptions) => Promise<T | undefined>;
+  refresh: (options?: FetchOptions<T>) => Promise<T | undefined>;
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 }
 
@@ -43,7 +43,7 @@ export function useResource<T, U = T>(
     url.startsWith('http') || url.startsWith('/') ? url : `/api/method/${url}`;
 
   const fetchData = useCallback(
-    async (options: FetchOptions = {}) => {
+    async (options: FetchOptions<U> = {}) => {
       setLoading(true);
       setError(null);
 

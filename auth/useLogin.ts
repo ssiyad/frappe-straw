@@ -1,10 +1,10 @@
 import { useResource } from '../resource';
-import type { ResponseMessage } from '../types';
+import type { FetchOptions, ResponseMessage } from '../types';
 
-type R = ResponseMessage & {
+interface R extends ResponseMessage {
   home_page: string;
   full_name: string;
-};
+}
 
 const method = 'post';
 const apiMethod = 'login';
@@ -15,19 +15,15 @@ const apiMethod = 'login';
  * @param password - Password to login with.
  * @returns `Resource` object.
  */
-export const useLogin = () => {
+export const useLogin = ({ onSuccess, onError }: FetchOptions<R> = {}) => {
   const resource = useResource<R>(apiMethod, {
     method,
     fetchOnMount: false,
+    onSuccess,
+    onError,
   });
 
-  const login = ({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }) => {
+  const login = (username: string, password: string) => {
     return resource.refresh({
       body: {
         usr: username,
