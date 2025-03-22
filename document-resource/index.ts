@@ -36,6 +36,7 @@ export function useDocumentResource<T extends BaseDocument>(
     fetchOnMount = true,
     onSuccess,
     onError,
+    onMessages,
   }: UseDocumentResourceOptions<T> = {},
 ): DocumentResource<T> {
   const url = useMemo(
@@ -48,6 +49,7 @@ export function useDocumentResource<T extends BaseDocument>(
     transform: (data) => data.data,
     onSuccess,
     onError,
+    onMessages,
   });
 
   const data = resource.data;
@@ -65,9 +67,9 @@ export function useDocumentResource<T extends BaseDocument>(
     canCancel,
     useStatus: () => useStatus(data),
     useTimeAgo: () => useTimeAgo(data),
-    useSave: () => useAction('Save', data, setData),
-    useSubmit: () => useAction('Submit', data, setData),
-    useCancel: () => useAction('Cancel', data, setData),
+    useSave: () => useAction('Save', doctype, data, setData),
+    useSubmit: () => useAction('Submit', doctype, data, setData),
+    useCancel: () => useAction('Cancel', doctype, data, setData),
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, setData);
     },

@@ -17,6 +17,7 @@ const actionMethod = 'frappe.desk.form.save.savedocs';
  */
 export const useAction = <T extends BaseDocument>(
   action: 'Save' | 'Submit' | 'Cancel',
+  doctype: string,
   doc?: T,
   setParentData?: React.Dispatch<React.SetStateAction<T | undefined>>,
   { onSuccess, onError }: FetchOptions<T> = {},
@@ -36,6 +37,7 @@ export const useAction = <T extends BaseDocument>(
       const parentDoc = await resource.refresh({
         body: {
           doc: JSON.stringify({
+            doctype,
             ...doc,
             ...values,
           }),
