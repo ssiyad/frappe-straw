@@ -1,10 +1,12 @@
 export interface BaseDocument {
-  doctype: string;
   name: string;
-  creation?: string;
-  docstatus?: 0 | 1 | 2;
+  creation: string;
+  modified: string;
+  owner: string;
+  modified_by: string;
+  docstatus: 0 | 1 | 2;
+  parent?: string;
+  parentfield?: string;
+  parenttype?: string;
   idx?: number;
-  modified?: string;
-  modified_by?: string;
-  owner?: string;
 }
