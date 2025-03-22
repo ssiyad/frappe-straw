@@ -1,6 +1,6 @@
 import React from 'react';
 import { useResource } from '../resource';
-import type { BaseDocument, FetchOptions } from '../types';
+import type { BaseDocument, DeepPartial, FetchOptions } from '../types';
 
 type R<T> = {
   docs: T[];
@@ -30,7 +30,7 @@ export const useAction = <T extends BaseDocument>(
     onError,
   });
 
-  const run = async (values?: Partial<T>) => {
+  const run = async (values?: DeepPartial<T>) => {
     try {
       const parentDoc = await resource.refresh({
         body: {

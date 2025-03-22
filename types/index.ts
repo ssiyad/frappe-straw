@@ -1,5 +1,6 @@
 export type { BaseDocument } from './BaseDocument';
 export type { Body } from './Body';
+export type { DeepPartial } from './DeepPartial.ts';
 export type { FetchOptions } from './FetchOptions';
 export type { HttpMethod } from './HttpMethod';
 export type { JsonCompatible } from './JsonCompatible';
