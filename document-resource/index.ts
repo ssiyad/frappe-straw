@@ -17,9 +17,9 @@ interface DocumentResource<T extends BaseDocument>
   canCancel: boolean;
   useStatus: () => ReturnType<typeof useStatus<T>>;
   useTimeAgo: () => ReturnType<typeof useTimeAgo<T>>;
-  useSave: () => ReturnType<typeof useAction<T>>;
-  useSubmit: () => ReturnType<typeof useAction<T>>;
-  useCancel: () => ReturnType<typeof useAction<T>>;
+  useSave: (options?: FetchOptions<T>) => ReturnType<typeof useAction<T>>;
+  useSubmit: (options?: FetchOptions<T>) => ReturnType<typeof useAction<T>>;
+  useCancel: (options?: FetchOptions<T>) => ReturnType<typeof useAction<T>>;
   useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
 }
 
@@ -67,9 +67,11 @@ export function useDocumentResource<T extends BaseDocument>(
     canCancel,
     useStatus: () => useStatus(data),
     useTimeAgo: () => useTimeAgo(data),
-    useSave: () => useAction('Save', doctype, data, setData),
-    useSubmit: () => useAction('Submit', doctype, data, setData),
-    useCancel: () => useAction('Cancel', doctype, data, setData),
+    useSave: (options) => useAction('Save', doctype, data, setData, options),
+    useSubmit: (options) =>
+      useAction('Submit', doctype, data, setData, options),
+    useCancel: (options) =>
+      useAction('Cancel', doctype, data, setData, options),
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, setData);
     },
