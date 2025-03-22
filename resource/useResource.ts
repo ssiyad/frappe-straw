@@ -30,6 +30,7 @@ export function useResource<T, U = T>(
     transform = (data) => data as unknown as U,
     onSuccess,
     onError,
+    onMessages,
   }: UseResourceOptions<T, U> = {},
 ): Resource<U> {
   const apiRequest = useApi<T>();
@@ -55,6 +56,7 @@ export function useResource<T, U = T>(
           body: options.body || body,
           cache,
           onError,
+          onMessages,
         });
         const transformed = transform(response);
         setData(transformed);

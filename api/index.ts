@@ -3,6 +3,8 @@ import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
 import { getCacheKey } from './cache';
 import { toStrawError } from './error';
+import { toServerMessages } from './message';
+import { strip } from './strip';
 
 /**
  * API request parameters.
@@ -20,6 +22,7 @@ export const useApi = <T = unknown>() => {
     client,
     cache: cacheStore,
     onError: onErrorGlobal,
+    onMessages: onMessagesGlobal,
   } = useContext(StrawContext);
 
   return useCallback(
@@ -30,6 +33,7 @@ export const useApi = <T = unknown>() => {
       body,
       cache,
       onError = onErrorGlobal,
+      onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {
       const cacheKey = cache
         ? getCacheKey(cache, url, method, params, body)
@@ -50,7 +54,10 @@ export const useApi = <T = unknown>() => {
 
         if (cacheKey) cacheStore.set(cacheKey, response.data);
 
-        return response.data;
+        const messages = toServerMessages(response);
+        if (messages.length > 0) onMessages?.(messages);
+        const stripped = strip(response.data);
+        return stripped;
       } catch (error: any) {
         const err = toStrawError(error);
         onError?.(err);

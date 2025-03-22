@@ -2,7 +2,7 @@ import TTLCache from '@isaacs/ttlcache';
 import { AxiosInstance } from 'axios';
 import { createContext, PropsWithChildren, useMemo } from 'react';
 import { createAxios } from '../axios';
-import { StrawError } from '../types';
+import type { ServerMessage, StrawError } from '../types';
 
 const defaultCache = new TTLCache({
   max: 1000,
@@ -13,6 +13,7 @@ export const StrawContext = createContext<{
   client: AxiosInstance;
   cache: TTLCache<unknown, unknown>;
   onError?: (error: StrawError) => void;
+  onMessages?: (messages: ServerMessage[]) => void;
 }>({
   client: {} as AxiosInstance,
   cache: defaultCache,
@@ -32,12 +33,14 @@ export const Straw = ({
   token,
   tokenType,
   onError,
+  onMessages,
   children,
 }: PropsWithChildren<{
   url?: string;
   token?: () => string;
   tokenType?: 'Bearer' | 'token';
   onError?: (error: StrawError) => void;
+  onMessages?: (messages: ServerMessage[]) => void;
 }>) => {
   const client = useMemo(
     () => createAxios({ url, token, tokenType }),
@@ -50,7 +53,7 @@ export const Straw = ({
   );
 
   return (
-    <StrawContext.Provider value={{ client, cache, onError }}>
+    <StrawContext.Provider value={{ client, cache, onError, onMessages }}>
       {children}
     </StrawContext.Provider>
   );
