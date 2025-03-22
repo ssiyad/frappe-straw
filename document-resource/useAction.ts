@@ -32,8 +32,6 @@ export const useAction = <T extends BaseDocument>(
 
   const run = async (values?: Partial<T>) => {
     try {
-      if (!doc) return;
-
       const parentDoc = await resource.refresh({
         body: {
           doc: JSON.stringify({
