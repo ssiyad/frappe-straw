@@ -1,12 +1,10 @@
-export type BaseDocument = {
-  creation: string;
-  docstatus: 0 | 1 | 2;
-  idx: number;
-  modified: string;
-  modified_by: string;
+export interface BaseDocument {
+  doctype: string;
   name: string;
-  owner: string;
-  parent?: any;
-  parentfield?: any;
-  parenttype?: any;
-};
+  creation?: string;
+  docstatus?: 0 | 1 | 2;
+  idx?: number;
+  modified?: string;
+  modified_by?: string;
+  owner?: string;
+}

@@ -15,8 +15,11 @@ export const useTimeAgo = <T extends BaseDocument>(doc?: T) => {
     });
   };
 
+  const createdAt = doc.creation ? format(doc.creation) : '';
+  const modifiedAt = doc.modified ? format(doc.modified) : '';
+
   return {
-    createdAt: format(doc.creation),
-    modifiedAt: format(doc.modified),
+    createdAt,
+    modifiedAt,
   };
 };
