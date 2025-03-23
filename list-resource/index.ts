@@ -2,10 +2,13 @@ import { useMemo, useState } from 'react';
 import { useResource } from '../resource';
 import type { FetchOptions, ListFilter } from '../types';
 import { tranformFilter } from './filters';
-import { useCount } from './useCount';
 
-interface UseListResourceOptions<T> extends FetchOptions<T> {
-  doctype: string;
+interface R<T> {
+  data: T[];
+}
+
+export interface UseListResourceOptions<T> extends FetchOptions<T> {
+  url: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
   group?: keyof T;
@@ -17,18 +20,17 @@ interface UseListResourceOptions<T> extends FetchOptions<T> {
   limit?: number;
 }
 
-interface ListResource<T> {
+interface ListResource<T> extends ReturnType<typeof useResource<R<T>, T[]>> {
   currentPage: number;
   nextPage: () => void;
   previousPage: () => void;
-  useCount: () => ReturnType<typeof useCount>;
 }
 
 /**
  * Hook to manage a list resource with pagination.
  */
 export function useListResource<T>({
-  doctype,
+  url,
   fields,
   filters,
   group,
@@ -37,7 +39,6 @@ export function useListResource<T>({
   limit = 10,
 }: UseListResourceOptions<T>): ListResource<T> {
   const [currentStart, setCurrentStart] = useState(start);
-  const url = useMemo(() => `/api/resource/${doctype}`, [doctype]);
   const params = useMemo(
     () => ({
       fields: fields === '*' ? [fields] : fields,
@@ -48,15 +49,22 @@ export function useListResource<T>({
       limit_start: currentStart,
       as_dict: true,
     }),
-    [fields, filters, group, sort, limit, currentStart],
+    [
+      JSON.stringify({
+        fields,
+        filters,
+        group,
+        sort,
+        limit,
+        currentStart,
+      }),
+    ],
   );
 
-  const resource = useResource<
-    {
-      data: T[];
-    },
-    T[]
-  >(url, { params, transform: (data) => data.data });
+  const resource = useResource<R<T>, T[]>(url, {
+    params,
+    transform: (data) => data.data,
+  });
 
   const currentPage = Math.floor(currentStart / limit) + 1;
 
@@ -73,6 +81,5 @@ export function useListResource<T>({
     nextPage,
     previousPage,
     currentPage,
-    useCount: (options?: FetchOptions) => useCount(doctype, filters, options),
   };
 }

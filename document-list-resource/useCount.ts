@@ -6,19 +6,15 @@ const apiMethod = 'frappe.desk.reportview.get_count';
 export const useCount = <T>(
   doctype: string,
   filters?: ListFilter<T>,
-  { onSuccess, onError }: FetchOptions<ResponseMessage<number>> = {},
+  { onSuccess, onError }: FetchOptions<number> = {},
 ) => {
-  const resource = useResource<ResponseMessage<number>>(apiMethod, {
+  return useResource<ResponseMessage<number>, number>(apiMethod, {
     params: {
       doctype,
       filters,
     },
+    transform: (data) => data.message,
     onSuccess,
     onError,
   });
-
-  return {
-    ...resource,
-    data: resource.data?.message,
-  };
 };
