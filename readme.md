@@ -1,5 +1,6 @@
 <div align='center'>
   <h1>Frappe Straw</h1>
+  <img src='https://raw.githubusercontent.com/ssiyad/frappe-straw/refs/heads/main/assets/bytsolv-logo.svg' width='150' />
   <div>
     <img src='https://img.shields.io/github/actions/workflow/status/ssiyad/frappe-straw/tests.yml' />
     <img src='https://img.shields.io/npm/dw/frappe-straw' />
@@ -10,7 +11,7 @@
     <a href='https://frappe.io/framework' target='_blank'>Frappe</a>
     client.
   </strong>
-  <div>Made with ❤️ at <a href='https://bytsolv.com/' target='_blank'>BytSolv</a>.</div>
+  <div>Made with ❤️ at <a href='https://bytsolv.com/' target='_blank'>Bytsolv</a>.</div>
 </div>
 
 ## Warning!
