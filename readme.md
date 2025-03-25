@@ -14,12 +14,11 @@
   <div>Made with ❤️ at <a href='https://bytsolv.com/' target='_blank'>Bytsolv</a>.</div>
 </div>
 
-## Warning!
-This package is in very active development. Components may or may not work as
-intended. If you face any issues, report them
-[here](https://github.com/ssiyad/frappe-straw/issues). If you want to
-contribute, please raise a [pull
-request](https://github.com/ssiyad/frappe-straw/pulls).
+## Demo
+You can install the demo app from
+[here](https://github.com/ssiyad/frappe-straw-demo). It contain example code
+and a playground. This can also be used as a test suite for development of this
+plugin.
 
 ## Installation
 ```shell
