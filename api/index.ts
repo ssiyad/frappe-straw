@@ -1,4 +1,5 @@
 import { useCallback, useContext } from 'react';
+import { useCache, useCacheUpdate } from '../cache';
 import { defaultCacheTTL } from '../consts';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
@@ -39,11 +40,8 @@ export const useApi = <T = unknown>() => {
       onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {
       const cacheKey = getCacheKey(cache, url, method, params, body);
-      const cacheTimeout = humanTimediff(cacheTime);
-
-      if (cacheKey && cacheStore.has(cacheKey)) {
-        return cacheStore.get(cacheKey) as T;
-      }
+      const cacheData = useCache<T>(cacheKey);
+      if (cacheData) return cacheData;
 
       try {
         const response = await client.request<T>({
@@ -55,8 +53,8 @@ export const useApi = <T = unknown>() => {
         });
 
         if (cacheKey) {
-          cacheStore.set(cacheKey, response.data, {
-            ttl: cacheTimeout,
+          useCacheUpdate(cacheKey, response.data, {
+            timeout: humanTimediff(cacheTime),
           });
         }
 

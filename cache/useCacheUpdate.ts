@@ -8,9 +8,15 @@ import { type JsonCompatible } from '../types';
  * @param key - Key against which cache should be updated.
  * @param value - Value to update.
  */
-export const useCacheUpdate = <T = unknown>(key: JsonCompatible, value: T) => {
+export const useCacheUpdate = <T = unknown>(
+  key: JsonCompatible,
+  value: T,
+  { timeout }: { timeout?: number } = {},
+) => {
   const { cache } = useContext(StrawContext);
   const cacheKey = getCacheKey(key);
-  cache.set(cacheKey, value);
+  cache.set(cacheKey, value, {
+    ttl: timeout,
+  });
   return value;
 };
