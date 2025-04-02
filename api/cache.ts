@@ -7,6 +7,11 @@ export const getCacheKey = (
   params?: Params,
   body?: Record<string, any>,
 ) => {
+  // If `cache` is not defined, we don't need to cache anything.
+  if (!cache) {
+    return false;
+  }
+
   // If `cache` is `true`, it probably means the user wants to cache the entire
   // api call.
   if (cache && typeof cache === 'boolean') {

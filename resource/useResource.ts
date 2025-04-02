@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
-import type { FetchOptions, JsonCompatible, StrawError } from '../types';
+import type { FetchOptions, StrawError } from '../types';
 
 interface UseResourceOptions<T, U> extends FetchOptions<U> {
   placeholder?: U;
-  cache?: JsonCompatible;
   fetchOnMount?: boolean;
   transform?: (data: T) => U;
 }
@@ -26,6 +25,7 @@ export function useResource<T, U = T>(
     params,
     placeholder,
     cache,
+    cacheTime,
     fetchOnMount = true,
     transform = (data) => data as unknown as U,
     onSuccess,
@@ -55,6 +55,7 @@ export function useResource<T, U = T>(
           params: options.params || params,
           body: options.body || body,
           cache,
+          cacheTime,
           onError,
           onMessages,
         });

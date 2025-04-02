@@ -33,6 +33,8 @@ export function useDocumentResource<T extends BaseDocument>(
   doctype: string,
   docname: string,
   {
+    cache,
+    cacheTime,
     fetchOnMount = true,
     onSuccess,
     onError,
@@ -45,6 +47,8 @@ export function useDocumentResource<T extends BaseDocument>(
   );
 
   const resource = useResource<{ data: T }, T>(url, {
+    cache,
+    cacheTime,
     fetchOnMount,
     transform: (data) => data.data,
     onSuccess,
