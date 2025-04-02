@@ -38,6 +38,7 @@ export function useListResource<T>({
   start = 0,
   limit = 10,
   cache,
+  cacheTime,
 }: UseListResourceOptions<T>): ListResource<T> {
   const [currentStart, setCurrentStart] = useState(start);
   const params = useMemo(
@@ -65,6 +66,7 @@ export function useListResource<T>({
   const resource = useResource<R<T>, T[]>(url, {
     params,
     cache,
+    cacheTime,
     transform: (data) => data.data,
   });
 

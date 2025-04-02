@@ -25,6 +25,7 @@ export function useResource<T, U = T>(
     params,
     placeholder,
     cache,
+    cacheTime,
     fetchOnMount = true,
     transform = (data) => data as unknown as U,
     onSuccess,
@@ -54,6 +55,7 @@ export function useResource<T, U = T>(
           params: options.params || params,
           body: options.body || body,
           cache,
+          cacheTime,
           onError,
           onMessages,
         });
