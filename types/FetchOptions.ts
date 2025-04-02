@@ -10,6 +10,7 @@ export type FetchOptions<T = unknown> = {
   body?: Body;
   params?: Params;
   cache?: JsonCompatible;
+  cacheTime?: string | number;
   onSuccess?: (data: T) => void;
   onError?: (error: StrawError) => void;
   onMessages?: (messages: ServerMessage[]) => void;

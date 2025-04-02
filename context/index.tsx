@@ -6,7 +6,6 @@ import type { ServerMessage, StrawError } from '../types';
 
 const defaultCache = new TTLCache({
   max: 1000,
-  ttl: 1000 * 60 * 5,
 });
 
 export const StrawContext = createContext<{

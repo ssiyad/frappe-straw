@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
+import { humanTimediff } from '../utils';
 import { getCacheKey } from './cache';
 import { toStrawError } from './error';
 import { toServerMessages } from './message';
@@ -32,10 +33,12 @@ export const useApi = <T = unknown>() => {
       params,
       body,
       cache,
+      cacheTime = 1000 * 60 * 5,
       onError = onErrorGlobal,
       onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {
       const cacheKey = getCacheKey(cache, url, method, params, body);
+      const cacheTimeout = humanTimediff(cacheTime);
 
       if (cacheKey && cacheStore.has(cacheKey)) {
         return cacheStore.get(cacheKey) as T;
@@ -50,7 +53,11 @@ export const useApi = <T = unknown>() => {
           data: body,
         });
 
-        if (cacheKey) cacheStore.set(cacheKey, response.data);
+        if (cacheKey) {
+          cacheStore.set(cacheKey, response.data, {
+            ttl: cacheTimeout,
+          });
+        }
 
         const messages = toServerMessages(response);
         if (messages.length > 0) onMessages?.(messages);
