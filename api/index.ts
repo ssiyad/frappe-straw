@@ -35,9 +35,7 @@ export const useApi = <T = unknown>() => {
       onError = onErrorGlobal,
       onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {
-      const cacheKey = cache
-        ? getCacheKey(cache, url, method, params, body)
-        : null;
+      const cacheKey = getCacheKey(cache, url, method, params, body);
 
       if (cacheKey && cacheStore.has(cacheKey)) {
         return cacheStore.get(cacheKey) as T;
