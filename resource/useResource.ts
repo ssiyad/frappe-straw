@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApi } from '../api';
-import type { FetchOptions, JsonCompatible, StrawError } from '../types';
+import type { FetchOptions, StrawError } from '../types';
 
 interface UseResourceOptions<T, U> extends FetchOptions<U> {
   placeholder?: U;
-  cache?: JsonCompatible;
   fetchOnMount?: boolean;
   transform?: (data: T) => U;
 }
