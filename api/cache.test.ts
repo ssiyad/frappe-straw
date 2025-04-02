@@ -10,7 +10,7 @@ test('Cache: `true` as key', () => {
 test('Cache: `false` as key', () => {
   expect(
     getCacheKey(false, '/an/internal/url', 'get', undefined, undefined),
-  ).toBe('false');
+  ).toBe(false);
 });
 
 test('Cache: Array of strings', () => {

@@ -9,7 +9,7 @@ export const getCacheKey = (
 ) => {
   // If `cache` is not defined, we don't need to cache anything.
   if (!cache) {
-    return;
+    return false;
   }
 
   // If `cache` is `true`, it probably means the user wants to cache the entire
