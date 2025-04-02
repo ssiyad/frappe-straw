@@ -1,4 +1,5 @@
 import { useCallback, useContext } from 'react';
+import { defaultCacheTTL } from '../consts';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
 import { humanTimediff } from '../utils';
@@ -33,7 +34,7 @@ export const useApi = <T = unknown>() => {
       params,
       body,
       cache,
-      cacheTime = 1000 * 60 * 5,
+      cacheTime = defaultCacheTTL,
       onError = onErrorGlobal,
       onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {

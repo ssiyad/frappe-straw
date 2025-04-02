@@ -2,11 +2,12 @@ import TTLCache from '@isaacs/ttlcache';
 import { AxiosInstance } from 'axios';
 import { createContext, PropsWithChildren, useMemo } from 'react';
 import { createAxios } from '../axios';
+import { defaultCacheTTL } from '../consts';
 import type { ServerMessage, StrawError } from '../types';
 
 const defaultCache = new TTLCache({
   max: 1000,
-  ttl: 1000 * 60 * 5,
+  ttl: defaultCacheTTL,
 });
 
 export const StrawContext = createContext<{
