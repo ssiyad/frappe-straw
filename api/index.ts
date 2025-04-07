@@ -3,7 +3,6 @@ import { getCacheKey, useCache, useCacheUpdate } from '../cache';
 import { defaultCacheTTL } from '../consts';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
-import { humanTimediff } from '../utils';
 import { toStrawError } from './error';
 import { toServerMessages } from './message';
 import { strip } from './strip';
@@ -55,7 +54,7 @@ export const useApi = <T = unknown>() => {
 
         if (cacheKey) {
           cacheUpdate(cacheKey, response.data, {
-            timeout: humanTimediff(cacheTime),
+            timeout: cacheTime,
           });
         }
 

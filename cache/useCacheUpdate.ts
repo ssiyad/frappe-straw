@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { StrawContext } from '../context';
 import { type JsonCompatible } from '../types';
+import { humanTimediff } from '../utils';
 import { getCacheKey } from './getCacheKey';
 
 /**
@@ -14,11 +15,12 @@ export const useCacheUpdate = () => {
   return <T = unknown>(
     key: JsonCompatible,
     value: T,
-    { timeout }: { timeout?: number } = {},
+    { timeout = 0 }: { timeout?: string | number } = {},
   ) => {
     const cacheKey = getCacheKey(key);
+    const ttl = humanTimediff(timeout);
     cache.set(cacheKey, value, {
-      ttl: timeout,
+      ttl,
     });
     return value;
   };
