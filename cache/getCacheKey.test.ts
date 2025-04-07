@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { getCacheKey } from './cache';
+import { getCacheKey } from './getCacheKey';
 
 test('Cache: `true` as key', () => {
   expect(

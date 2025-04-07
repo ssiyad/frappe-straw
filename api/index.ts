@@ -1,10 +1,9 @@
 import { useCallback, useContext } from 'react';
-import { useCache, useCacheUpdate } from '../cache';
+import { getCacheKey, useCache, useCacheUpdate } from '../cache';
 import { defaultCacheTTL } from '../consts';
 import { StrawContext } from '../context';
 import type { FetchOptions, JsonCompatible } from '../types';
 import { humanTimediff } from '../utils';
-import { getCacheKey } from './cache';
 import { toStrawError } from './error';
 import { toServerMessages } from './message';
 import { strip } from './strip';

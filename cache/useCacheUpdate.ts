@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { getCacheKey } from '../api/cache';
 import { StrawContext } from '../context';
 import { type JsonCompatible } from '../types';
+import { getCacheKey } from './getCacheKey';
 
 /**
  * Update cache of `key`.
