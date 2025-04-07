@@ -6,5 +6,8 @@ import { StrawContext } from '../context';
  */
 export const useCacheClear = () => {
   const { cache } = useContext(StrawContext);
-  cache.clear();
+
+  return () => {
+    cache.clear();
+  };
 };

@@ -18,6 +18,11 @@ export const getCacheKey = (
     return JSON.stringify({ url, method, body, params });
   }
 
+  // If `cache` is a string, it is probably a cache key.
+  if (typeof cache === 'string') {
+    return cache;
+  }
+
   // If `cache` is an object, the use is more deliberate about what to cache.
   return JSON.stringify(cache);
 };

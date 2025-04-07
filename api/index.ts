@@ -27,6 +27,8 @@ export const useApi = <T = unknown>() => {
     onError: onErrorGlobal,
     onMessages: onMessagesGlobal,
   } = useContext(StrawContext);
+  const cacheGet = useCache();
+  const cacheUpdate = useCacheUpdate();
 
   return useCallback(
     async ({
@@ -40,7 +42,7 @@ export const useApi = <T = unknown>() => {
       onMessages = onMessagesGlobal,
     }: ApiRequest): Promise<T> => {
       const cacheKey = getCacheKey(cache, url, method, params, body);
-      const cacheData = useCache<T>(cacheKey);
+      const cacheData = cacheGet<T>(cacheKey);
       if (cacheData) return cacheData;
 
       try {
@@ -53,7 +55,7 @@ export const useApi = <T = unknown>() => {
         });
 
         if (cacheKey) {
-          useCacheUpdate(cacheKey, response.data, {
+          cacheUpdate(cacheKey, response.data, {
             timeout: humanTimediff(cacheTime),
           });
         }
