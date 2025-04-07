@@ -1,5 +1,14 @@
 import type { JsonCompatible, Params } from '../types';
 
+/**
+ * Constructs a cache key based on the provided parameters.
+ * @param cache - The cache configuration, which can be a boolean, string, or object.
+ * @param url - The URL of the API request.
+ * @param method - The HTTP method of the API request.
+ * @param params - The query parameters of the API request.
+ * @param body - The body of the API request.
+ * @returns The constructed cache key, or false if caching is not enabled.
+ */
 export const getCacheKey = (
   cache?: JsonCompatible,
   url?: string,
