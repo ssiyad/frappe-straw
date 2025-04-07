@@ -7,7 +7,7 @@ export const getCacheKey = (
   params?: Params,
   body?: Record<string, any>,
 ) => {
-  // If `cache` is not defined, we don't need to cache anything.
+  // If `cache` is not defined, we don't have to cache anything.
   if (!cache) {
     return false;
   }
@@ -23,6 +23,6 @@ export const getCacheKey = (
     return cache;
   }
 
-  // If `cache` is an object, the use is more deliberate about what to cache.
+  // If `cache` is an object, the user is more deliberate about what to cache.
   return JSON.stringify(cache);
 };
