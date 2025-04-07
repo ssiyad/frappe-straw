@@ -8,6 +8,7 @@ import { getCacheKey } from './getCacheKey';
  * Update cache of `key`.
  * @param key - Key against which cache should be updated.
  * @param value - Value to update.
+ * @param timeout - Time to live for the cache.
  */
 export const useCacheUpdate = () => {
   const { cache } = useContext(StrawContext);
