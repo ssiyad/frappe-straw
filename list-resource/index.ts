@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useResource } from '../resource';
 import type { FetchOptions, ListFilter } from '../types';
 import { tranformFilter } from './filters';
@@ -22,8 +22,6 @@ export interface UseListResourceOptions<T> extends FetchOptions<T> {
 
 interface ListResource<T> extends ReturnType<typeof useResource<R<T>, T[]>> {
   currentPage: number;
-  nextPage: () => void;
-  previousPage: () => void;
 }
 
 /**
@@ -40,7 +38,6 @@ export function useListResource<T>({
   cache,
   cacheTime,
 }: UseListResourceOptions<T>): ListResource<T> {
-  const [currentStart, setCurrentStart] = useState(start);
   const params = useMemo(
     () => ({
       fields: fields === '*' ? [fields] : fields,
@@ -48,7 +45,7 @@ export function useListResource<T>({
       group_by: group,
       order_by: sort && `${sort.field.toString()} ${sort.direction}`,
       limit,
-      limit_start: currentStart,
+      limit_start: start,
       as_dict: true,
     }),
     [
@@ -57,9 +54,8 @@ export function useListResource<T>({
         filters,
         group,
         sort,
-        limit,
         start,
-        currentStart,
+        limit,
       }),
     ],
   );
@@ -71,20 +67,10 @@ export function useListResource<T>({
     transform: (data) => data.data,
   });
 
-  const currentPage = Math.floor(currentStart / limit) + 1;
-
-  const nextPage = () => {
-    setCurrentStart((prev) => prev + limit);
-  };
-
-  const previousPage = () => {
-    setCurrentStart((prev) => Math.max(prev - limit, 0));
-  };
+  const currentPage = Math.floor(start / limit) + 1;
 
   return {
     ...resource,
-    nextPage,
-    previousPage,
     currentPage,
   };
 }
