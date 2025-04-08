@@ -58,6 +58,7 @@ export function useListResource<T>({
         group,
         sort,
         limit,
+        start,
         currentStart,
       }),
     ],
