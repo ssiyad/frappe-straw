@@ -25,7 +25,7 @@ plugin.
 npm install frappe-straw
 ```
 
-Examaple
+Example
 ```typescript
 import { useDocument } from 'frappe-straw';
 import { type BaseDocument } from 'frappe-straw/types';
