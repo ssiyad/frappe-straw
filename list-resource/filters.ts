@@ -10,7 +10,10 @@ import type {
  * @returns Transformed filter object compatible with Frappe
  */
 export const tranformFilter = <T>(input: ListFilter<T>) => {
-  return Object.keys(input)
+  type V = ListFilter<T>[keyof T];
+  type I = [keyof T, ListFilterOperator, V];
+
+  const result = Object.keys(input)
     .map((k) => {
       const key = k as keyof T;
       const val = input[key];
@@ -35,6 +38,8 @@ export const tranformFilter = <T>(input: ListFilter<T>) => {
         acc.push([x.key, x.operator, x.value]);
         return acc;
       },
-      [] as unknown as [keyof T, ListFilterOperator, ListFilter<T>[keyof T]][],
+      [] as unknown as I[],
     );
+
+  return JSON.stringify(result);
 };
