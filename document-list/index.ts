@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useList, type UseListOptions } from '../list-resource';
+import { useList, type UseListOptions } from '../list';
 import { type FetchOptions } from '../types';
 import { useCount } from './useCount';
 

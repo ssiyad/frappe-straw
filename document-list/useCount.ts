@@ -1,4 +1,4 @@
-import { tranformFilter } from '../list-resource/filters';
+import { tranformFilter } from '../list/filters';
 import { useResource } from '../resource';
 import type { FetchOptions, ListFilter, ResponseMessage } from '../types';
 
