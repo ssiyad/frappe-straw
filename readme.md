@@ -25,12 +25,12 @@ plugin.
 npm install frappe-straw
 ```
 
-Examaple
+Example
 ```typescript
-import { useDocumentResource } from 'frappe-straw';
+import { useDocument } from 'frappe-straw';
 import { type BaseDocument } from 'frappe-straw/types';
 
-const { data, error, loading, refresh } = useDocumentResource<BaseDocument>(
+const { data, error, loading, refresh } = useDocument<BaseDocument>(
   'Role',
   'Guest',
   {
