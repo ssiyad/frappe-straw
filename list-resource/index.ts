@@ -41,7 +41,7 @@ export function useListResource<T>({
   const params = useMemo(
     () => ({
       fields: fields === '*' ? [fields] : fields,
-      filters: filters && tranformFilter(filters),
+      filters: filters && JSON.stringify(tranformFilter(filters)),
       group_by: group,
       order_by: sort && `${sort.field.toString()} ${sort.direction}`,
       limit,

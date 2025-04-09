@@ -13,7 +13,7 @@ export const tranformFilter = <T>(input: ListFilter<T>) => {
   type V = ListFilter<T>[keyof T];
   type I = [keyof T, ListFilterOperator, V];
 
-  const result = Object.keys(input)
+  return Object.keys(input)
     .map((k) => {
       const key = k as keyof T;
       const val = input[key];
@@ -40,6 +40,4 @@ export const tranformFilter = <T>(input: ListFilter<T>) => {
       },
       [] as unknown as I[],
     );
-
-  return JSON.stringify(result);
 };

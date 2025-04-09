@@ -1,3 +1,4 @@
+import { tranformFilter } from '../list-resource/filters';
 import { useResource } from '../resource';
 import type { FetchOptions, ListFilter, ResponseMessage } from '../types';
 
@@ -11,7 +12,7 @@ export const useCount = <T>(
   return useResource<ResponseMessage<number>, number>(apiMethod, {
     params: {
       doctype,
-      filters,
+      filters: filters && JSON.stringify(tranformFilter(filters)),
     },
     cache,
     cacheTime,
