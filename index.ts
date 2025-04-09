@@ -7,7 +7,7 @@ export {
   useCacheUpdate,
 } from './cache';
 export { Straw } from './context';
-export { useDocumentListResource } from './document-list-resource';
-export { useDocumentResource } from './document-resource';
-export { useListResource } from './list-resource';
+export { useDocumentList } from './document-list-resource';
+export { useDocument } from './document-resource';
+export { useList } from './list-resource';
 export { StrawResource, useResource } from './resource';

@@ -1,29 +1,28 @@
 import { useMemo } from 'react';
-import { useListResource, type UseListResourceOptions } from '../list-resource';
+import { useList, type UseListOptions } from '../list-resource';
 import { type FetchOptions } from '../types';
 import { useCount } from './useCount';
 
-interface UseDocumentListResourceOptions<T>
-  extends Omit<UseListResourceOptions<T>, 'url'> {
+interface UseDocumentListOptions<T> extends Omit<UseListOptions<T>, 'url'> {
   doctype: string;
 }
 
-interface ListResource<T> extends ReturnType<typeof useListResource<T>> {
+interface DocumentList<T> extends ReturnType<typeof useList<T>> {
   useCount: (options?: FetchOptions<number>) => ReturnType<typeof useCount>;
 }
 
 /**
  * Hook to manage a document (of doctype) list resource with pagination.
  */
-export function useDocumentListResource<T>({
+export function useDocumentList<T>({
   doctype,
   ...listOptions
-}: UseDocumentListResourceOptions<T>): ListResource<T> {
+}: UseDocumentListOptions<T>): DocumentList<T> {
   // Construct the URL for the resource.
   const url = useMemo(() => `/api/resource/${doctype}`, [doctype]);
 
   // Use the list resource hook.
-  const listResource = useListResource({
+  const listResource = useList({
     url,
     ...listOptions,
   });

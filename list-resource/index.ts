@@ -7,7 +7,7 @@ interface R<T> {
   data: T[];
 }
 
-export interface UseListResourceOptions<T> extends FetchOptions<T> {
+export interface UseListOptions<T> extends FetchOptions<T> {
   url: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
@@ -20,14 +20,14 @@ export interface UseListResourceOptions<T> extends FetchOptions<T> {
   limit?: number;
 }
 
-interface ListResource<T> extends ReturnType<typeof useResource<R<T>, T[]>> {
+interface List<T> extends ReturnType<typeof useResource<R<T>, T[]>> {
   currentPage: number;
 }
 
 /**
  * Hook to manage a list resource with pagination.
  */
-export function useListResource<T>({
+export function useList<T>({
   url,
   fields,
   filters,
@@ -37,7 +37,7 @@ export function useListResource<T>({
   limit = 10,
   cache,
   cacheTime,
-}: UseListResourceOptions<T>): ListResource<T> {
+}: UseListOptions<T>): List<T> {
   const params = useMemo(
     () => ({
       fields: fields === '*' ? [fields] : fields,

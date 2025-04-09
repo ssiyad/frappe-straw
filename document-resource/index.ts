@@ -6,11 +6,11 @@ import { useMethod } from './useMethod';
 import { useStatus } from './useStatus';
 import { useTimeAgo } from './useTimeAgo';
 
-interface UseDocumentResourceOptions<T> extends FetchOptions<T> {
+interface UseDocumentOptions<T> extends FetchOptions<T> {
   fetchOnMount?: boolean;
 }
 
-interface DocumentResource<T extends BaseDocument>
+interface Document<T extends BaseDocument>
   extends ReturnType<typeof useResource<T>> {
   canSave: boolean;
   canSubmit: boolean;
@@ -29,7 +29,7 @@ interface DocumentResource<T extends BaseDocument>
  * @param docname - Document name.
  * @returns `DocumentResource<T>`
  */
-export function useDocumentResource<T extends BaseDocument>(
+export function useDocument<T extends BaseDocument>(
   doctype: string,
   docname: string,
   {
@@ -39,8 +39,8 @@ export function useDocumentResource<T extends BaseDocument>(
     onSuccess,
     onError,
     onMessages,
-  }: UseDocumentResourceOptions<T> = {},
-): DocumentResource<T> {
+  }: UseDocumentOptions<T> = {},
+): Document<T> {
   const url = useMemo(
     () => `/api/resource/${doctype}/${docname}`,
     [doctype, docname],
