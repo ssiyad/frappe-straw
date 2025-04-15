@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useResource } from '../resource';
 import type { BaseDocument, FetchOptions } from '../types';
 import { useAction } from './useAction';
+import { useDelete } from './useDelete';
 import { useMethod } from './useMethod';
 import { useStatus } from './useStatus';
 import { useTimeAgo } from './useTimeAgo';
@@ -21,6 +22,7 @@ interface Document<T extends BaseDocument>
   useSubmit: (options?: FetchOptions<T>) => ReturnType<typeof useAction<T>>;
   useCancel: (options?: FetchOptions<T>) => ReturnType<typeof useAction<T>>;
   useMethod: <U>(method: string) => ReturnType<typeof useMethod<U, T>>;
+  useDelete: (options?: FetchOptions) => ReturnType<typeof useDelete>;
 }
 
 /**
@@ -79,5 +81,6 @@ export function useDocument<T extends BaseDocument>(
     useMethod: <U>(method: string) => {
       return useMethod<U, T>(method, doctype, docname, setData);
     },
+    useDelete: (options) => useDelete(doctype, docname, options),
   };
 }
