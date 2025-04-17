@@ -43,5 +43,7 @@ const { data, error, loading, refresh } = useDocument<BaseDocument>(
 - [Frappe JS SDK](https://github.com/The-Commit-Company/frappe-js-sdk)
 - [frappe-ui](https://ui.frappe.io/)
 
-## License
-[GPLv3](LICENSE)
+## Self Promotion
+Like this project? Give it a star! ⭐, and spread the word! 🚀. And if you are
+feeling especially charitable, follow [ssiyad](https://ssiyad.com) on
+[GitHub](https://github.com/ssiyad)
