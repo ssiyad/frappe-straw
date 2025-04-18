@@ -45,5 +45,5 @@ const { data, error, loading, refresh } = useDocument<BaseDocument>(
 
 ## Self Promotion
 Like this project? Give it a star! ⭐, and spread the word! 🚀. And if you are
-feeling especially charitable, follow [ssiyad](https://ssiyad.com) on
+feeling especially charitable, follow [Sabu Siyad](https://ssiyad.com) on
 [GitHub](https://github.com/ssiyad)
