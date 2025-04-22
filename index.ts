@@ -11,3 +11,4 @@ export { useDocument } from './document';
 export { useDocumentList } from './document-list';
 export { useList } from './list';
 export { StrawResource, useResource } from './resource';
+export * from './types';
