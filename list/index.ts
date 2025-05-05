@@ -7,7 +7,7 @@ interface R<T> {
   data: T[];
 }
 
-export interface UseListOptions<T> extends FetchOptions<T> {
+export interface UseListOptions<T> extends FetchOptions<T[]> {
   url: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
@@ -35,6 +35,9 @@ export function useList<T>({
   sort,
   start = 0,
   limit = 10,
+  onSuccess,
+  onError,
+  onMessages,
   cache,
   cacheTime,
 }: UseListOptions<T>): List<T> {
@@ -65,6 +68,9 @@ export function useList<T>({
     cache,
     cacheTime,
     transform: (data) => data.data,
+    onSuccess,
+    onError,
+    onMessages,
   });
 
   const currentPage = Math.floor(start / limit) + 1;
