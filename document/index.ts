@@ -43,10 +43,14 @@ export function useDocument<T extends BaseDocument>(
     onMessages,
   }: UseDocumentOptions<T> = {},
 ): Document<T> {
-  const url = useMemo(
-    () => `/api/resource/${doctype}/${docname}`,
-    [doctype, docname],
-  );
+  const url = useMemo(() => {
+    return (
+      '/api/resource/' +
+      encodeURIComponent(doctype) +
+      '/' +
+      encodeURIComponent(docname)
+    );
+  }, [doctype, docname]);
 
   const resource = useResource<{ data: T }, T>(url, {
     cache,
