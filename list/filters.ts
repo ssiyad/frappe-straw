@@ -35,7 +35,8 @@ export const tranformFilter = <T>(input: ListFilter<T>) => {
     .filter((x) => !!x.value)
     .reduce(
       (acc, x) => {
-        acc.push([x.key, x.operator, x.value]);
+        // @ts-ignore
+        acc.push([x.key, x.operator, x.value].map(encodeURIComponent));
         return acc;
       },
       [] as unknown as I[],
