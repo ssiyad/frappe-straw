@@ -29,6 +29,7 @@ export function useDocumentList<T>({
 
   return {
     ...listResource,
-    useCount: (options) => useCount(doctype, listOptions.filters, options),
+    useCount: (options) =>
+      useCount(doctype, listOptions.filters, listOptions.orFilters, options),
   };
 }
