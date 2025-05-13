@@ -1,6 +1,6 @@
 {
   "name": "frappe-straw",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Yet another straw to consume Frappe",
   "main": "index.ts",
   "repository": "git@github.com:ssiyad/frappe-straw.git",
