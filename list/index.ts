@@ -11,6 +11,7 @@ export interface UseListOptions<T> extends FetchOptions<T[]> {
   url: string;
   fields?: (keyof T)[] | '*';
   filters?: ListFilter<T>;
+  orFilters?: ListFilter<T>;
   group?: keyof T;
   sort?: {
     field: keyof T;
@@ -31,6 +32,7 @@ export function useList<T>({
   url,
   fields,
   filters,
+  orFilters,
   group,
   sort,
   start = 0,
@@ -45,6 +47,7 @@ export function useList<T>({
     () => ({
       fields: fields === '*' ? [fields] : fields,
       filters: filters && JSON.stringify(tranformFilter(filters)),
+      or_filters: orFilters && JSON.stringify(tranformFilter(orFilters)),
       group_by: group,
       order_by: sort && `${sort.field.toString()} ${sort.direction}`,
       limit,
@@ -55,6 +58,7 @@ export function useList<T>({
       JSON.stringify({
         fields,
         filters,
+        orFilters,
         group,
         sort,
         start,
